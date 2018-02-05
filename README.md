@@ -1,1 +1,2 @@
-# SSW555_spring2018
+# SSW555
+Projects for Agile Methods of Software Development
