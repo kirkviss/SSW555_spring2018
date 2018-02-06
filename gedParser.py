@@ -11,10 +11,6 @@ from prettytable import PrettyTable
 indis = {}
 fams = {}
 
-#indiGen = {'Name': '', 'Gender': '', 'Birthday': '', 'Age': '', 'Alive': 'True', 'Child': '', 'Spouse': ''}
-
-#famGen = {'Married': '', 'Divorced': '', 'Husband ID': '', 'Husband Name': '', 'Wife Id': '', 'Wife Name': '', 'Children': []}
-
 dateTags = {'BIRT': 'Birthday', 'DEAT': 'Death', 'MARR': 'Marriage', 'DIV': 'Divorce'}
 
 indiTags = {'NAME': 'Name', 'SEX': 'Gender', 'FAMC': 'Child', 'FAMS': 'Spouse'}
