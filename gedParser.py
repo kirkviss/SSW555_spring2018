@@ -7,16 +7,19 @@ import collections
 import datetime
 from prettytable import PrettyTable
 
-
+#Dictionaries to store unsorted individuals and families
 indis = {}
 fams = {}
 
+#dictionaries holding tags and respective values for easier handling of dicts
 dateTags = {'BIRT': 'Birthday', 'DEAT': 'Death', 'MARR': 'Marriage', 'DIV': 'Divorce'}
-
 indiTags = {'NAME': 'Name', 'SEX': 'Gender', 'FAMC': 'Child', 'FAMS': 'Spouse'}
 famTags = {'HUSB': ['Husband ID', 'Husband Name'], 'WIFE': ['Wife ID', 'Wife Name']}
 monthNums = {'JAN': '01', 'MAR': '03', 'MAY': '05', 'JUL': '07', 'AUG': '08', 'OCT': '10', 'DEC': '12', 'APR': '04', 'JUN': '06', 'SEP' : '09','NOV': '11', 'FEB': '02'}
 
+#Main function which parses through GEDCOM file, stores individuals and
+#families in dictionaries, sorts dictionaries into collections
+#then finally pretty prints collections
 def gedcomParser():
     infile = open('testfile.ged', 'r')
     currId = "0"
@@ -83,6 +86,7 @@ def gedcomParser():
     print('Families')
     print(prettyFam)
 
+#Function to calculate age of Individual
 def getAge(Id):
     currDate = datetime.date.today()
     birth = list(map(int, indis[Id]['Birthday'].split('-')))
@@ -95,6 +99,7 @@ def getAge(Id):
     years = days/365
     return(str(int(years)))
 
+#Function to evaluate and reformat 0 level lines
 def zeroLine(ln):
     if len(ln) > 2:
         if ln[2] == 'INDI' or ln[2] == 'FAM':
@@ -116,6 +121,7 @@ def zeroLine(ln):
         ln.append('N')
         return ln
 
+#Function to evaluate and reformat 1 level lines
 def oneLine(ln):
     if ln[1] == 'NAME':
         if len(ln) == 2 or (len(ln) > 2 and ln[-1][0] + ln[-1][-1] != '//'):
@@ -144,6 +150,7 @@ def oneLine(ln):
     ln.append('N')
     return ln
 
+#Function to evaluate and reformat 2 level lines
 def twoLine(ln):
     months = ['JAN', 'MAR', 'MAY', 'JUL', 'AUG', 'OCT', 'DEC', 'APR', 'JUN',
               'SEP','NOV', 'FEB']
@@ -162,13 +169,5 @@ def twoLine(ln):
             return ln
     ln.append('N')
     return ln
-
-"""def buildLine(arr):
-    string = '<-- ' + arr[0] + '|' + arr[1] + '|' + arr[-1] + '|'
-    if len(arr) > 3:
-        string = string + arr[2]
-        for i in arr[3:-1]:
-            string = string + ' ' + i
-    return string"""
 
 gedcomParser()
