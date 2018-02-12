@@ -90,6 +90,7 @@ def gedcomParser():
     for k,v in individuals.items():
         birthBeforeDeath(k, v['Birthday'], v['Death'])
 
+
 #Function to calculate age of Individual
 def getAge(Id):
     currDate = datetime.date.today()
@@ -185,6 +186,5 @@ def birthBeforeDeath(k, birthday, death):
         return 1
     else:
         return 0
-
 
 gedcomParser()
