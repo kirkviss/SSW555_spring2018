@@ -102,6 +102,7 @@ def gedcomParser():
     #Family checks
     for k,v in families.items():
         divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
+        birthBeforeMarriage(k, v['Marriage'], v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'])
 
 
 
@@ -201,6 +202,27 @@ def dateHasPassed(date, currDict, currId, dateType):
         if(currDict == indis):
             return("Error: Invalid "+ dateType + "for INDIVIDUAL" + currId + ": " + date + " has not happened yet as of " + str(datetime.date.today()))
     return ""
+
+#US02: Function to check that birth is before marriage
+def birthBeforeMarriage(k, marriage, husbandId, husbandBirth, wifeId, wifeBirth):
+    #Do not compare if null
+    if marriage == "N/A":
+        return 0
+
+    error = 0
+    #check husband birth
+    if husbandBirth != "N/A" and husbandBirth > marriage:
+        print("ERROR: FAMILY: US06: " + str(k) + ": Married " + str(marriage) + \
+        " before husband's (" + husbandId + ") birth on " + str(husbandBirth))
+        error = 1
+    #check wife birth
+    if wifeBirth != "N/A" and wifeBirth > marriage:
+        print("ERROR: FAMILY: US06: " + str(k) + ": Married " + str(marriage) + \
+        " before wife's (" + wifeId + ") birth on " + str(wifeBirth))
+        error = 1
+
+    return error
+
 
 #US03: Function to check that birth comes before death
 def birthBeforeDeath(k, birthday, death):
