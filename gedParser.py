@@ -72,8 +72,8 @@ def gedcomParser():
         row = list([k, v['Name'], v['Birthday'], v['Gender'], v['Age'], v['Alive'],
               v['Death'], v['Child'], v['Spouse']])
         prettyIndi.add_row(row)
-    print('Individuals')
-    print(prettyIndi)
+    #print('Individuals')
+    #print(prettyIndi)
     families = collections.OrderedDict(sorted(fams.items()))
     prettyFam = PrettyTable(["Id", 'Married', 'Divorced', 'Husband ID',
                              'Husband Name', 'Wife ID', 'Wife Name',
@@ -83,8 +83,8 @@ def gedcomParser():
                              v['Husband Name'], v['Wife ID'], v['Wife Name'],
                              v['Children']])
         prettyFam.add_row(row)
-    print('Families')
-    print(prettyFam)
+    #print('Families')
+    #print(prettyFam)
 
     #US03
     for k,v in individuals.items():
@@ -175,14 +175,25 @@ def twoLine(ln):
     ln.append('N')
     return ln
 
-#US03
+#US01: Function to check if a date is before the current date
+def dateHasPassed(date):
+    currDate = datetime.date.today()
+    checkDate = list(map(int, date.split('-')))
+    if (datetime.date(checkDate[0], checkDate[1], checkDate[2]) -
+        currDate).days > 0:
+        print("Error: " + date + " has not happened yet as of " +
+              str(datetime.date.today()))
+        return False
+    return True
+
+#US03: Function to check that birth comes before death
 def birthBeforeDeath(k, birthday, death):
     #Do not compare if null
     if death == "N/A" or birthday == "N/A":
         return 0
 
     if death < birthday:
-        print "ERROR: INDIVIDUAL: US03: " + str(k) + " Died " + str(death) + " before Born " + str(birthday)
+        print("ERROR: INDIVIDUAL: US03: " + str(k) + " Died " + str(death) + " before Born " + str(birthday))
         return 1
     else:
         return 0
