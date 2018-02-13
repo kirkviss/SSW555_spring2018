@@ -17,6 +17,8 @@ indiTags = {"NAME": "Name", "SEX": "Gender", "FAMC": "Child", "FAMS": "Spouse"}
 famTags = {"HUSB": ["Husband ID", "Husband Name"], "WIFE": ["Wife ID", "Wife Name"]}
 monthNums = {"JAN": "01", "MAR": "03", "MAY": "05", "JUL": "07", "AUG": "08", "OCT": "10", "DEC": "12", "APR": "04", "JUN": "06", "SEP" : "09","NOV": "11", "FEB": "02"}
 
+dateErrors = []
+
 #Main function which parses through GEDCOM file, stores individuals and
 #families in dictionaries, sorts dictionaries into collections
 #then finally pretty prints collections
@@ -58,7 +60,13 @@ def gedcomParser():
                     fams[currId]["Children"].append(parts[2])
         elif line[0] == "2":
             parts = twoLine(line.split())
+<<<<<<< HEAD
             currDict[currId][Date] = parts[4] + "-" + monthNums[parts[3]] + "-" + parts[2]
+=======
+            dateStr = parts[4] + '-' + monthNums[parts[3]] + '-' + parts[2]
+            currDict[currId][Date] = dateStr
+            dateErrors.append(dateHasPassed(dateStr, currDict, currId, Date))
+>>>>>>> a35549fdf2bc53a25f3a6a92c5ce612614555399
         else:
             parts = line.split()
             parts.append("N")
@@ -86,13 +94,25 @@ def gedcomParser():
     print("Families")
     print(prettyFam)
 
-    #US03
+    #Invalid date errors
+    for err in dateErrors:
+        if len(err) > 0:
+            print(err)
+
+    #Individual Checks
     for k,v in individuals.items():
         birthBeforeDeath(k, v["Birthday"], v["Death"])
 
     #US04 
     for k, v in families.items(): 
         marriageBeforeDivorce(k, v["Marriage"], v["Divorce"])
+
+    #Family checks
+    for k,v in families.items():
+        divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
+        birthBeforeMarriage(k, v['Marriage'], v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'])
+
+
 
 
 #Function to calculate age of Individual
@@ -179,7 +199,40 @@ def twoLine(ln):
     ln.append("N")
     return ln
 
-#US03
+#US01: Function to check if a date is before the current date
+def dateHasPassed(date, currDict, currId, dateType):
+    currDate = datetime.date.today()
+    checkDate = list(map(int, date.split('-')))
+    if (datetime.date(checkDate[0], checkDate[1], checkDate[2]) -
+        currDate).days > 0:
+        if(currDict == fams):
+            return("Error: Invalid "+ dateType + "for FAMILY" + currId + ": " + date + " has not happened yet as of " + str(datetime.date.today()))
+        if(currDict == indis):
+            return("Error: Invalid "+ dateType + "for INDIVIDUAL" + currId + ": " + date + " has not happened yet as of " + str(datetime.date.today()))
+    return ""
+
+#US02: Function to check that birth is before marriage
+def birthBeforeMarriage(k, marriage, husbandId, husbandBirth, wifeId, wifeBirth):
+    #Do not compare if null
+    if marriage == "N/A":
+        return 0
+
+    error = 0
+    #check husband birth
+    if husbandBirth != "N/A" and husbandBirth > marriage:
+        print("ERROR: FAMILY: US06: " + str(k) + ": Married " + str(marriage) + \
+        " before husband's (" + husbandId + ") birth on " + str(husbandBirth))
+        error = 1
+    #check wife birth
+    if wifeBirth != "N/A" and wifeBirth > marriage:
+        print("ERROR: FAMILY: US06: " + str(k) + ": Married " + str(marriage) + \
+        " before wife's (" + wifeId + ") birth on " + str(wifeBirth))
+        error = 1
+
+    return error
+
+
+#US03: Function to check that birth comes before death
 def birthBeforeDeath(k, birthday, death):
     #Do not compare if null
     if death == "N/A" or birthday == "N/A":
@@ -206,5 +259,24 @@ def marriageBeforeDivorce(familyItem, marriage,divorce ):
     else:
         return 0
 
+#US06
+def divorceBeforeDeath(k, divorce, husbandId, husbandDeath, wifeId, wifeDeath):
+    #Do not compare if null
+    if divorce == "N/A":
+        return 0
+
+    error = 0
+    #check husband death
+    if husbandDeath != "N/A" and husbandDeath < divorce:
+        print("ERROR: FAMILY: US06: " + str(k) + ": Divorced " + str(divorce) + \
+        " after husband's (" + husbandId + ") death on " + str(husbandDeath))
+        error = 1
+    #check wife death
+    if wifeDeath != "N/A" and wifeDeath < divorce:
+        print("ERROR: FAMILY: US06: " + str(k) + ": Divorced " + str(divorce) + \
+        " after wife's (" + wifeId + ") death on " + str(wifeDeath))
+        error = 1
+
+    return error
 
 gedcomParser()
