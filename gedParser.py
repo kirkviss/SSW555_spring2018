@@ -90,6 +90,11 @@ def gedcomParser():
     for k,v in individuals.items():
         birthBeforeDeath(k, v['Birthday'], v['Death'])
 
+    #US06
+    for k,v in families.items():
+        divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
+
+
 
 #Function to calculate age of Individual
 def getAge(Id):
@@ -182,9 +187,29 @@ def birthBeforeDeath(k, birthday, death):
         return 0
 
     if death < birthday:
-        print "ERROR: INDIVIDUAL: US03: " + str(k) + " Died " + str(death) + " before Born " + str(birthday)
+        print("ERROR: INDIVIDUAL: US03: " + str(k) + " Died " + str(death) + " before Born " + str(birthday))
         return 1
     else:
         return 0
+
+#US06
+def divorceBeforeDeath(k, divorce, husbandId, husbandDeath, wifeId, wifeDeath):
+    #Do not compare if null
+    if divorce == "N/A":
+        return 0
+
+    error = 0
+    #check husband death
+    if husbandDeath != "N/A" and husbandDeath < divorce:
+        print("ERROR: FAMILY: US06: " + str(k) + ": Divorced " + str(divorce) + \
+        " after husband's (" + husbandId + ") death on " + str(husbandDeath))
+        error = 1
+    #check wife death
+    if wifeDeath != "N/A" and wifeDeath < divorce:
+        print("ERROR: FAMILY: US06: " + str(k) + ": Divorced " + str(divorce) + \
+        " after wife's (" + wifeId + ") death on " + str(wifeDeath))
+        error = 1
+
+    return error
 
 gedcomParser()
