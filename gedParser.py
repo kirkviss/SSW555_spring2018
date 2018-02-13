@@ -17,6 +17,8 @@ indiTags = {'NAME': 'Name', 'SEX': 'Gender', 'FAMC': 'Child', 'FAMS': 'Spouse'}
 famTags = {'HUSB': ['Husband ID', 'Husband Name'], 'WIFE': ['Wife ID', 'Wife Name']}
 monthNums = {'JAN': '01', 'MAR': '03', 'MAY': '05', 'JUL': '07', 'AUG': '08', 'OCT': '10', 'DEC': '12', 'APR': '04', 'JUN': '06', 'SEP' : '09','NOV': '11', 'FEB': '02'}
 
+dateErrors = []
+
 #Main function which parses through GEDCOM file, stores individuals and
 #families in dictionaries, sorts dictionaries into collections
 #then finally pretty prints collections
@@ -58,7 +60,9 @@ def gedcomParser():
                     fams[currId]['Children'].append(parts[2])
         elif line[0] == '2':
             parts = twoLine(line.split())
-            currDict[currId][Date] = parts[4] + '-' + monthNums[parts[3]] + '-' + parts[2]
+            dateStr = parts[4] + '-' + monthNums[parts[3]] + '-' + parts[2]
+            currDict[currId][Date] = dateStr
+            dateErrors.append(dateHasPassed(dateStr, currDict, currId, Date))
         else:
             parts = line.split()
             parts.append('N')
@@ -72,8 +76,8 @@ def gedcomParser():
         row = list([k, v['Name'], v['Birthday'], v['Gender'], v['Age'], v['Alive'],
               v['Death'], v['Child'], v['Spouse']])
         prettyIndi.add_row(row)
-    #print('Individuals')
-    #print(prettyIndi)
+    print('Individuals')
+    print(prettyIndi)
     families = collections.OrderedDict(sorted(fams.items()))
     prettyFam = PrettyTable(["Id", 'Married', 'Divorced', 'Husband ID',
                              'Husband Name', 'Wife ID', 'Wife Name',
@@ -83,16 +87,22 @@ def gedcomParser():
                              v['Husband Name'], v['Wife ID'], v['Wife Name'],
                              v['Children']])
         prettyFam.add_row(row)
-    #print('Families')
-    #print(prettyFam)
+    print('Families')
+    print(prettyFam)
 
-    #US03
+    #Invalid date errors
+    for err in dateErrors:
+        if len(err) > 0:
+            print(err)
+
+    #Individual Checks
     for k,v in individuals.items():
         birthBeforeDeath(k, v['Birthday'], v['Death'])
 
-    #US06
+    #Family checks
     for k,v in families.items():
         divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
+
 
 
 
@@ -181,15 +191,16 @@ def twoLine(ln):
     return ln
 
 #US01: Function to check if a date is before the current date
-def dateHasPassed(date):
+def dateHasPassed(date, currDict, currId, dateType):
     currDate = datetime.date.today()
     checkDate = list(map(int, date.split('-')))
     if (datetime.date(checkDate[0], checkDate[1], checkDate[2]) -
         currDate).days > 0:
-        print("Error: " + date + " has not happened yet as of " +
-              str(datetime.date.today()))
-        return False
-    return True
+        if(currDict == fams):
+            return("Error: Invalid "+ dateType + "for FAMILY" + currId + ": " + date + " has not happened yet as of " + str(datetime.date.today()))
+        if(currDict == indis):
+            return("Error: Invalid "+ dateType + "for INDIVIDUAL" + currId + ": " + date + " has not happened yet as of " + str(datetime.date.today()))
+    return ""
 
 #US03: Function to check that birth comes before death
 def birthBeforeDeath(k, birthday, death):
