@@ -60,13 +60,9 @@ def gedcomParser():
                     fams[currId]["Children"].append(parts[2])
         elif line[0] == "2":
             parts = twoLine(line.split())
-<<<<<<< HEAD
-            currDict[currId][Date] = parts[4] + "-" + monthNums[parts[3]] + "-" + parts[2]
-=======
             dateStr = parts[4] + '-' + monthNums[parts[3]] + '-' + parts[2]
             currDict[currId][Date] = dateStr
             dateErrors.append(dateHasPassed(dateStr, currDict, currId, Date))
->>>>>>> a35549fdf2bc53a25f3a6a92c5ce612614555399
         else:
             parts = line.split()
             parts.append("N")
@@ -103,12 +99,15 @@ def gedcomParser():
     for k,v in individuals.items():
         birthBeforeDeath(k, v["Birthday"], v["Death"])
 
-    #US04 
-    for k, v in families.items(): 
-        marriageBeforeDivorce(k, v["Marriage"], v["Divorce"])
+    # #US04 
+    # for k, v in families.items(): 
+    #     marriageBeforeDivorce(k, v["Marriage"], v["Divorce"])
+
 
     #Family checks
     for k,v in families.items():
+        marriageBeforeDivorce(k, v["Marriage"], v["Divorce"])
+        marriageBeforeDeath(k, v['Marriage'],v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         birthBeforeMarriage(k, v['Marriage'], v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'])
 
@@ -258,6 +257,23 @@ def marriageBeforeDivorce(familyItem, marriage,divorce ):
 
     else:
         return 0
+
+#US05
+def marriageBeforeDeath(familyItem, marriage, husbandId, husbandDeath, wifeId, wifeDeath):
+    if marriage == "N/A":
+        return 0
+    
+    binary_bol = 0
+    if husbandDeath != "N/A" and husbandDeath < marriage:
+        print("ERROR: FAMILY: US05: " + str(familyItem) + ": marriage " + str(marriage) +  "after husband's (" + husbandId + ") death on " + str(husbandDeath))
+        binary_bol = 1
+    if  wifeDeath != "N/A" and wifeDeath < marriage: 
+        print("Error: FAMILY: US05 " + str(familyItem) + ": marriage " + str(marriage) + "after wife's (" + wifeId + ") death on " + str(wfieDeath))
+        binary_bol = 1 
+
+    return binary_bol
+
+
 
 #US06
 def divorceBeforeDeath(k, divorce, husbandId, husbandDeath, wifeId, wifeDeath):
