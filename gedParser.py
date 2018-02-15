@@ -98,11 +98,8 @@ def gedcomParser():
     #Individual Checks
     for k,v in individuals.items():
         birthBeforeDeath(k, v["Birthday"], v["Death"])
-
-    # #US04 
-    # for k, v in families.items(): 
-    #     marriageBeforeDivorce(k, v["Marriage"], v["Divorce"])
-
+        birthBeforeDeath(k, v["Age"])
+        
 
     #Family checks
     for k,v in families.items():
@@ -294,5 +291,18 @@ def divorceBeforeDeath(k, divorce, husbandId, husbandDeath, wifeId, wifeDeath):
         error = 1
 
     return error
+
+
+#US07
+def ageLessThanOneFifty(k, age):
+    if age == "N/A":
+        return 0
+
+    if age > 150 or age < 0:
+		print("ERROR: INDIVIDUAL: US07: " + str(k) + " age " + str(age) + " is older than 150 or less than 0.")
+		return 1
+	else:
+        return 0
+
 
 gedcomParser()
