@@ -107,7 +107,7 @@ def gedcomParser():
         marriageBeforeDeath(k, v['Marriage'],v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         birthBeforeMarriage(k, v['Marriage'], v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'])
-
+        birthBeforeMarriage(k, v["Marriage"], v["Children"])
 
 
 
@@ -303,6 +303,23 @@ def ageLessThanOneFifty(k, age):
 	return 1
     else:
         return 0
+
+
+#US08
+def birthBeforeMarriage(k, familyItem, marriage, children):
+	if marriage == "N/A" or children == "N/A":
+		return 0
+
+	r = 0
+	if familyItem > datetime.datetime(1, 1, 1).date():
+	     if int(days_difference(div,datetime.datetime.strptime(k, '%d %b %Y').date(), 'months')) > 9:
+		 r = 1
+		 print("ERROR: Family: US08: " + children + "s birthday " + str(datetime.datetime.strptime(k, '%d %b %Y').date()) + "is more than 9 months after their parent's divorce " + str(familyItem))
+	if marriage > datetime.datetime(1, 1, 1).date():
+	     if int(days_difference(datetime.datetime.strptime(k, '%d %b %Y').date(), marriage, 'days')) > 0:
+		 r = 1
+		 print("ERROR: Family: US08: " + children + "s birthday" + str(datetime.datetime.strptime(k, '%d %b %Y').date()) + " is before their parent's marriage" + str(marriage))
+    return r       
 
 
 gedcomParser()
