@@ -17,6 +17,18 @@ indiTags = {"NAME": "Name", "SEX": "Gender", "FAMC": "Child", "FAMS": "Spouse"}
 famTags = {"HUSB": ["Husband ID", "Husband Name"], "WIFE": ["Wife ID", "Wife Name"]}
 monthNums = {"JAN": "01", "MAR": "03", "MAY": "05", "JUL": "07", "AUG": "08", "OCT": "10", "DEC": "12", "APR": "04", "JUN": "06", "SEP" : "09","NOV": "11", "FEB": "02"}
 
+def afterDate(d1, d2):
+	if not isinstance(d1, datetime.date):
+	       d1 = datetime.datetime.strptime(d1, '%d %b %Y').date()
+	if not isinstance(d2, datetime.date):
+		d2 = datetime.datetime.strptime(d2, '%d %b %Y').date()
+	if d1 > d2:
+		return 0 #invalid date
+	elif d1 < d2:
+		return 1
+	else:
+                return 0
+
 dateErrors = []
 
 #Main function which parses through GEDCOM file, stores individuals and
