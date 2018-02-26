@@ -311,27 +311,27 @@ def ageLessThanOneFifty(k, age):
         return 0
 
     if age > 150 or age < 0:
-	print("ERROR: INDIVIDUAL: US07: " + str(k) + " age " + str(age) + " is older than 150 or less than 0.")
-	return 1
+        print("ERROR: INDIVIDUAL: US07: " + str(k) + " age " + str(age) + " is older than 150 or less than 0.")
+        return 1
     else:
         return 0
 
 
 #US08
-def birthBeforeMarriageOfParents(k, familyItem, marriage, children):
-	if marriage == "N/A" or children == "N/A":
-		return 0
+def birthBeforeMarriageOfParents(k, div, familyItem, marriage, children):
+    if marriage == "N/A" or children == "N/A":
+        return 0
 
-	error = 0
-	if familyItem > datetime.datetime(1, 1, 1).date():
-	     if int(days_difference(div,datetime.datetime.strptime(k, '%d %b %Y').date(), 'months')) > 9:
-		 error = 1
-		 print("ERROR: Family: US08: " + children + "s birthday " + str(datetime.datetime.strptime(k, '%d %b %Y').date()) + "is more than 9 months after their parent's divorce " + str(familyItem))
-	if marriage > datetime.datetime(1, 1, 1).date():
-	     if int(days_difference(datetime.datetime.strptime(k, '%d %b %Y').date(), marriage, 'days')) > 0:
-		 error = 1
-		 print("ERROR: Family: US08: " + children + "s birthday" + str(datetime.datetime.strptime(k, '%d %b %Y').date()) + " is before their parent's marriage" + str(marriage))
-    return error       
+    error = 0
+    if familyItem > datetime.datetime(1, 1, 1).date():
+        if int(days_difference(div,datetime.datetime.strptime(k, '%d %b %Y').date(), 'months')) > 9:
+            error = 1
+            print("ERROR: Family: US08: " + children + "s birthday " + str(datetime.datetime.strptime(k, '%d %b %Y').date()) + "is more than 9 months after their parent's divorce " + str(familyItem))
+    if marriage > datetime.datetime(1, 1, 1).date():
+        if int(days_diffrence(datetime.datetime.strptime(k, '%d %b %Y').date(), marriage, 'days')) > 0:
+         error = 1
+        print("ERROR: Family: US08: " + children + "s birthday" + str(datetime.datetime.strptime(k, '%d %b %Y').date()) + " is before their parent's marriage" + str(marriage))
+        return error
 
 
 gedcomParser()
