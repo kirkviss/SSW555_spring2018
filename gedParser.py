@@ -19,7 +19,7 @@ monthNums = {"JAN": "01", "MAR": "03", "MAY": "05", "JUL": "07", "AUG": "08", "O
 
 def afterDate(d1, d2):
 	if not isinstance(d1, datetime.date):
-	       d1 = datetime.datetime.strptime(d1, '%d %b %Y').date()
+		d1 = datetime.datetime.strptime(d1, '%d %b %Y').date()
 	if not isinstance(d2, datetime.date):
 		d2 = datetime.datetime.strptime(d2, '%d %b %Y').date()
 	if d1 > d2:
@@ -27,7 +27,15 @@ def afterDate(d1, d2):
 	elif d1 < d2:
 		return 1
 	else:
-                return 0
+		return 0
+    
+    
+def days_difference(d1, d2, type):
+	if afterDate(d1,d2):
+		return -1
+	else:
+		typeDict = {'years': 365, 'weeks': 7, 'months': 30.4, 'days': 1}
+		return str(((d2-d1)/typeDict[type]).days)
 
 dateErrors = []
 
