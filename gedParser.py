@@ -322,7 +322,7 @@ def ageLessThanOneFifty(k, age):
     if age == "N/A":
         return 0
 
-    if age > 150 or age < 0:
+    if int(age) > 150 or int(age) < 0:
         print("ERROR: INDIVIDUAL: US07: " + str(k) + " age " + str(age) + " is older than 150 or less than 0.")
         return 1
     else:
