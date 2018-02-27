@@ -43,7 +43,7 @@ printErrors = []
 #families in dictionaries, sorts dictionaries into collections
 #then finally pretty prints collections
 def gedcomParser():
-    infile = open("testfile.ged", "r")
+    infile = open("badTree.ged", "r")
     currId = "0"
     currDict = {}
     Date = ""
@@ -132,6 +132,7 @@ def gedcomParser():
         birthBeforeMarriage(k, v['Marriage'], v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'])
         #    birthBeforeMarriageOfParents(k, v["Marriage"], v["Children"])
         husbWifeNotSiblings(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
+        husbWifeNotCousins(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
 
 
 
@@ -353,6 +354,27 @@ def husbWifeNotSiblings(k, husbID, husbFam, wifeID, wifeFam):
         else:
                 return 0
 
-
+def husbWifeNotCousins(k, husbID, husbFam, wifeID, wifeFam):
+        error = 0
+        if husbFam != 'N/A' and wifeFam != 'N/A':
+                hDad = fams[husbFam]['Husband ID']
+                hMom = fams[husbFam]['Wife ID']
+                wDad = fams[wifeFam]['Husband ID']
+                wMom = fams[wifeFam]['Wife ID']
+                hDadFam = indis[hDad]['Child']
+                hMomFam = indis[hMom]['Child']
+                wDadFam = indis[wDad]['Child']
+                wMomFam = indis[wMom]['Child']
+                if hDadFam == wDadFam and hDadFam != 'N/A':
+                        error = 1
+                if hDadFam == wMomFam and hDadFam != 'N/A':
+                        error = 1
+                if hMomFam == wDadFam and hMomFam != 'N/A':
+                        error = 1
+                if hMomFam == wMomFam and hMomFam != 'N/A':
+                        error = 1
+        if error == 1:
+                print('ERROR: FAMILY: '+ k + " Husband (" + husbID +") and wife (" + wifeID + ") are first cousins and married")
+        return error
 
 gedcomParser()
