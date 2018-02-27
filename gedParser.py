@@ -130,7 +130,8 @@ def gedcomParser():
         marriageBeforeDeath(k, v['Marriage'],v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         birthBeforeMarriage(k, v['Marriage'], v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'])
-    #    birthBeforeMarriageOfParents(k, v["Marriage"], v["Children"])
+        #    birthBeforeMarriageOfParents(k, v["Marriage"], v["Children"])
+        husbWifeNotSiblings(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
 
 
 
@@ -343,6 +344,15 @@ def birthBeforeMarriageOfParents(k, div, familyItem, marriage, children):
          error = 1
         print("ERROR: Family: US08: " + children + "s birthday" + str(datetime.datetime.strptime(k, '%d %b %Y').date()) + " is before their parent's marriage" + str(marriage))
         return error
+
+#US18
+def husbWifeNotSiblings(k, husbID, husbFam, wifeID, wifeFam):
+        if husbID != 'N/A' and husbID == wifeID:
+                print('ERROR: FAMILY: ' + k + ": husband (" + husbID + ") and wife (" + wifeID + ") are siblings.")
+                return 1
+        else:
+                return 0
+
 
 
 gedcomParser()
