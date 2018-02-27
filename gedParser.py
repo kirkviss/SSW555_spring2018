@@ -121,7 +121,7 @@ def gedcomParser():
     #Individual Checks
     for k,v in individuals.items():
         birthBeforeDeath(k, v["Birthday"], v["Death"])
-    #    ageLessThanOneFifty(k, v["Age"])
+        ageLessThanOneFifty(k, v["Age"])
         
 
     #Family checks
