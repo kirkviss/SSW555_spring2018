@@ -17,7 +17,7 @@ indiTags = {'NAME': 'Name', 'SEX': 'Gender', 'FAMC': 'Child', 'FAMS': 'Spouse'}
 famTags = {'HUSB': ['Husband ID', 'Husband Name'], 'WIFE': ['Wife ID', 'Wife Name']}
 monthNums = {'JAN': '01', 'MAR': '03', 'MAY': '05', 'JUL': '07', 'AUG': '08', 'OCT': '10', 'DEC': '12', 'APR': '04', 'JUN': '06', 'SEP' : '09','NOV': '11', 'FEB': '02'}
 
-dateErrors = []
+printErrors = []
 
 #Main function which parses through GEDCOM file, stores individuals and
 #families in dictionaries, sorts dictionaries into collections
@@ -32,8 +32,10 @@ def gedcomParser():
             parts = zeroLine(line.split())
             if parts[1] == 'INDI':
                 currId = parts[2]
-                indis[currId] = {'Death': 'N/A', 'Alive': 'True', 'Spouse':
-                                 'N/A/', 'Child': 'N/A'}
+                #US22
+                if currId in indis.keys():
+                    printErrors.append("ERROR: INDIVIDUAL: US22: id " + currId + " already found. Previous individual has been replaced.")
+                indis[currId] = {'Death': 'N/A', 'Alive': 'True', 'Spouse': 'N/A/', 'Child': 'N/A'}
                 currDict = indis
             if parts[1] == 'FAM':
                 currId = parts[2]
@@ -62,7 +64,7 @@ def gedcomParser():
             parts = twoLine(line.split())
             dateStr = parts[4] + '-' + monthNums[parts[3]] + '-' + parts[2]
             currDict[currId][Date] = dateStr
-            dateErrors.append(dateHasPassed(dateStr, currDict, currId, Date))
+            printErrors.append(dateHasPassed(dateStr, currDict, currId, Date))
         else:
             parts = line.split()
             parts.append('N')
@@ -91,7 +93,7 @@ def gedcomParser():
     print(prettyFam)
 
     #Invalid date errors
-    for err in dateErrors:
+    for err in printErrors:
         if len(err) > 0:
             print(err)
 
