@@ -45,8 +45,8 @@ printErrors = []
 #families in dictionaries, sorts dictionaries into collections
 #then finally pretty prints collections
 def gedcomParser():
-    if (len(sys.argv) > 3 and sys.argv[2][-4:] == ".ged"):
-        infile = open(sys.argv[2], "r")
+    if (len(sys.argv) > 1 and sys.argv[1][-4:] == ".ged"):
+        infile = open(sys.argv[1], "r")
     else:
         infile = open("testfile.ged", "r")
     currId = "0"
