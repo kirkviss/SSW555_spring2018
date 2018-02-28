@@ -5,6 +5,7 @@
 import os
 import collections
 import datetime
+import sys
 from prettytable import PrettyTable
 
 #Dictionaries to store unsorted individuals and families
@@ -43,7 +44,10 @@ printErrors = []
 #families in dictionaries, sorts dictionaries into collections
 #then finally pretty prints collections
 def gedcomParser():
-    infile = open("testfile.ged", "r")
+    if (len(sys.argv) > 3 and sys.argv[2][-4:] == ".ged"):
+        infile = open(sys.argv[2], "r")
+    else:
+        infile = open("testfile.ged", "r")
     currId = "0"
     currDict = {}
     Date = ""
