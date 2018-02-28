@@ -6,6 +6,7 @@ import os
 import collections
 import datetime
 import sys
+import dateutil.relativedelta
 from prettytable import PrettyTable
 
 #Dictionaries to store unsorted individuals and families
@@ -35,7 +36,7 @@ def days_difference(d1, d2, type):
 	if afterDate(d1,d2):
 		return -1
 	else:
-		typeDict = {'years': 365, 'weeks': 7, 'months': 30.4, 'days': 1}
+		typeDict = {"years": 365, "weeks": 7, "months": 30.4, "days": 1} 
 		return str(((d2-d1)/typeDict[type]).days)
 
 printErrors = []
@@ -125,7 +126,7 @@ def gedcomParser():
     #Individual Checks
     for k,v in individuals.items():
         birthBeforeDeath(k, v["Birthday"], v["Death"])
-    #    ageLessThanOneFifty(k, v["Age"])
+        ageLessThanOneFifty(k, v["Age"])
         
 
     #Family checks
@@ -134,7 +135,15 @@ def gedcomParser():
         marriageBeforeDeath(k, v['Marriage'],v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         birthBeforeMarriage(k, v['Marriage'], v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'])
-    #    birthBeforeMarriageOfParents(k, v["Marriage"], v["Children"])
+        
+        for child in v['Children']: 
+            birthBeforeMarriageOfParents(v['Husband ID'], v['Wife ID'], v['Marriage'],child, individuals[child]['Birthday'])
+            birthBeforeDeathOfParent(v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'], child,individuals[child]['Birthday'])
+            parentsAgeCheck(v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'], child, individuals[child]['Birthday'])
+     
+     
+        husbWifeNotSiblings(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
+        husbWifeNotCousins(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
 
 
 
@@ -325,7 +334,7 @@ def ageLessThanOneFifty(k, age):
     if age == "N/A":
         return 0
 
-    if age > 150 or age < 0:
+    if int(age) > 150 or int(age) < 0:
         print("ERROR: INDIVIDUAL: US07: " + str(k) + " age " + str(age) + " is older than 150 or less than 0.")
         return 1
     else:
@@ -333,20 +342,91 @@ def ageLessThanOneFifty(k, age):
 
 
 #US08
-def birthBeforeMarriageOfParents(k, div, familyItem, marriage, children):
-    if marriage == "N/A" or children == "N/A":
+def birthBeforeMarriageOfParents( husbandId, wifeId, marriage, childId, childBirthday):
+    
+    err = 0
+    
+    if marriage == "N/A" or childId == "N/A":
+        return err
+
+    if marriage > childBirthday:
+        print("ERROR: Family: US09: Child: " + childId + "'s birthday is before the marriage of husband " + husbandId +" and wife " + wifeId)
+        err = 1
+
+    return err 
+
+#US09 Parents not too old 
+# Mother's death should after the birth of the child
+# Father's death should be after at least 9 months before the birth of the child
+def birthBeforeDeathOfParent(husbandId, husbandDeath, wifeId, wifeDeath, childId, childBirthday):
+     
+    err = 0
+
+    if childId == "N/A" or (husbandDeath == "N/A" and wifeDeath == "N/A"):
+        return err
+
+    if not (wifeDeath == "N/A") and wifeDeath < childBirthday:
+        err = 1 
+        print("ERROR: Family: US09: Child: " + childId + "'s birthday is after the death of  thier mother " + wifeId)
+
+
+    if not (husbandDeath == "N/A") and (datetime.datetime.strptime(husbandDeath, '%Y-%m-%d') + dateutil.relativedelta.relativedelta(months=9)) < datetime.datetime.strptime( childBirthday, '%Y-%m-%d')  :
+        err = 1
+        print("ERROR: Family: US09:  Child: " + childId + "'s birthday is more than 9 months after the death of their father " + husbandId)
+         
+    return err
+
+#US12 Parents
+# Mother should be less than 60 years older than her children and father should be less than 80 years older than his children
+def parentsAgeCheck(husbandId, husbandBirth, wifeId, wifeBirth, childId, childBirth):
+    err = 0 
+
+    if childId == 'N/A' or husbandId == 'N/A' or wifeId == 'N/A':
         return 0
 
-    error = 0
-    if familyItem > datetime.datetime(1, 1, 1).date():
-        if int(days_difference(div,datetime.datetime.strptime(k, '%d %b %Y').date(), 'months')) > 9:
-            error = 1
-            print("ERROR: Family: US08: " + children + "s birthday " + str(datetime.datetime.strptime(k, '%d %b %Y').date()) + "is more than 9 months after their parent's divorce " + str(familyItem))
-    if marriage > datetime.datetime(1, 1, 1).date():
-        if int(days_diffrence(datetime.datetime.strptime(k, '%d %b %Y').date(), marriage, 'days')) > 0:
-         error = 1
-        print("ERROR: Family: US08: " + children + "s birthday" + str(datetime.datetime.strptime(k, '%d %b %Y').date()) + " is before their parent's marriage" + str(marriage))
-        return error
+    date_type_husbandBirth = datetime.datetime.strptime(husbandBirth, '%Y-%m-%d')
+    date_type_wifeBirth = datetime.datetime.strptime(wifeBirth, '%Y-%m-%d')
+    date_type_childBirth = datetime.datetime.strptime(childBirth,'%Y-%m-%d' )
 
+
+    if dateutil.relativedelta.relativedelta(date_type_husbandBirth, date_type_childBirth).years >= 80:
+        err = 1
+        print("ERROR: US12: Father too old")
+
+    if dateutil.relativedelta.relativedelta(date_type_wifeBirth, date_type_childBirth).years >= 60:
+        err = 1
+        print("ERROR: US12: Mother too old")
+
+    return err
+#US18
+def husbWifeNotSiblings(k, husbID, husbFam, wifeID, wifeFam):
+        if husbID != 'N/A' and husbID == wifeID:
+                print('ERROR: FAMILY: ' + k + ": husband (" + husbID + ") and wife (" + wifeID + ") are siblings.")
+                return 1
+        else:
+                return 0
+
+def husbWifeNotCousins(k, husbID, husbFam, wifeID, wifeFam):
+        error = 0
+        if husbFam != 'N/A' and wifeFam != 'N/A':
+                hDad = fams[husbFam]['Husband ID']
+                hMom = fams[husbFam]['Wife ID']
+                wDad = fams[wifeFam]['Husband ID']
+                wMom = fams[wifeFam]['Wife ID']
+                hDadFam = indis[hDad]['Child']
+                hMomFam = indis[hMom]['Child']
+                wDadFam = indis[wDad]['Child']
+                wMomFam = indis[wMom]['Child']
+                if hDadFam == wDadFam and hDadFam != 'N/A':
+                        error = 1
+                if hDadFam == wMomFam and hDadFam != 'N/A':
+                        error = 1
+                if hMomFam == wDadFam and hMomFam != 'N/A':
+                        error = 1
+                if hMomFam == wMomFam and hMomFam != 'N/A':
+                        error = 1
+        if error == 1:
+                print('ERROR: FAMILY: '+ k + " Husband (" + husbID +") and wife (" + wifeID + ") are first cousins and married")
+        return error
 
 gedcomParser()
