@@ -38,13 +38,13 @@ def days_difference(d1, d2, type):
 		typeDict = {'years': 365, 'weeks': 7, 'months': 30.4, 'days': 1}
 		return str(((d2-d1)/typeDict[type]).days)
 
-dateErrors = []
+printErrors = []
 
 #Main function which parses through GEDCOM file, stores individuals and
 #families in dictionaries, sorts dictionaries into collections
 #then finally pretty prints collections
 def gedcomParser():
-    infile = open("testfile.ged", "r")
+    infile = open("badTree.ged", "r")
     currId = "0"
     currDict = {}
     Date = ""
@@ -53,6 +53,9 @@ def gedcomParser():
             parts = zeroLine(line.split())
             if parts[1] == "INDI":
                 currId = parts[2]
+                #US22
+                if currId in indis.keys():
+                    printErrors.append("ERROR: INDIVIDUAL: US22: id " + currId + " already found. Previous individual has been replaced.")
                 indis[currId] = {"Death": "N/A", "Alive": "True", "Spouse":
                                  "N/A/", "Child": "N/A"}
                 currDict = indis
@@ -83,7 +86,7 @@ def gedcomParser():
             parts = twoLine(line.split())
             dateStr = parts[4] + '-' + monthNums[parts[3]] + '-' + parts[2]
             currDict[currId][Date] = dateStr
-            dateErrors.append(dateHasPassed(dateStr, currDict, currId, Date))
+            printErrors.append(dateHasPassed(dateStr, currDict, currId, Date))
         else:
             parts = line.split()
             parts.append("N")
@@ -112,7 +115,7 @@ def gedcomParser():
     print(prettyFam)
 
     #Invalid date errors
-    for err in dateErrors:
+    for err in printErrors:
         if len(err) > 0:
             print(err)
 
@@ -128,11 +131,25 @@ def gedcomParser():
         marriageBeforeDeath(k, v['Marriage'],v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         birthBeforeMarriage(k, v['Marriage'], v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'])
+<<<<<<< HEAD
         
         for child in v['Children']: 
             birthBeforeMarriageOfParents(v['Husband ID'], v['Wife ID'], v['Marriage'],child, individuals[child]['Birthday'])
             birthBeforeDeathOfParent(v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'], child,individuals[child]['Birthday'])
             parentsAgeCheck(v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'], child, individuals[child]['Birthday'])
+||||||| merged common ancestors
+        birthBeforeMarriageOfParents(k, v["Marriage"], v["Children"])
+
+
+
+=======
+        #    birthBeforeMarriageOfParents(k, v["Marriage"], v["Children"])
+        husbWifeNotSiblings(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
+        husbWifeNotCousins(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
+
+
+
+>>>>>>> 187602377d6b0aadebfb843b219ff43b3f98f505
 #Function to calculate age of Individual
 def getAge(Id):
     currDate = datetime.date.today()
@@ -319,8 +336,16 @@ def divorceBeforeDeath(k, divorce, husbandId, husbandDeath, wifeId, wifeDeath):
 def ageLessThanOneFifty(k, age):
     if age == "N/A":
         return 0
+<<<<<<< HEAD
     
     if int(age) > 150 or int(age) < 0:
+||||||| merged common ancestors
+
+    if age > 150 or age < 0:
+=======
+
+    if int(age) > 150 or int(age) < 0:
+>>>>>>> 187602377d6b0aadebfb843b219ff43b3f98f505
         print("ERROR: INDIVIDUAL: US07: " + str(k) + " age " + str(age) + " is older than 150 or less than 0.")
         return 1
     else:
@@ -383,6 +408,40 @@ def parentsAgeCheck(husbandId, husbandBirth, wifeId, wifeBirth, childId, childBi
         err = 1
         print("ERROR: US12: Mother too old")
 
+<<<<<<< HEAD
     return err
+||||||| merged common ancestors
+=======
+#US18
+def husbWifeNotSiblings(k, husbID, husbFam, wifeID, wifeFam):
+        if husbID != 'N/A' and husbID == wifeID:
+                print('ERROR: FAMILY: ' + k + ": husband (" + husbID + ") and wife (" + wifeID + ") are siblings.")
+                return 1
+        else:
+                return 0
+
+def husbWifeNotCousins(k, husbID, husbFam, wifeID, wifeFam):
+        error = 0
+        if husbFam != 'N/A' and wifeFam != 'N/A':
+                hDad = fams[husbFam]['Husband ID']
+                hMom = fams[husbFam]['Wife ID']
+                wDad = fams[wifeFam]['Husband ID']
+                wMom = fams[wifeFam]['Wife ID']
+                hDadFam = indis[hDad]['Child']
+                hMomFam = indis[hMom]['Child']
+                wDadFam = indis[wDad]['Child']
+                wMomFam = indis[wMom]['Child']
+                if hDadFam == wDadFam and hDadFam != 'N/A':
+                        error = 1
+                if hDadFam == wMomFam and hDadFam != 'N/A':
+                        error = 1
+                if hMomFam == wDadFam and hMomFam != 'N/A':
+                        error = 1
+                if hMomFam == wMomFam and hMomFam != 'N/A':
+                        error = 1
+        if error == 1:
+                print('ERROR: FAMILY: '+ k + " Husband (" + husbID +") and wife (" + wifeID + ") are first cousins and married")
+        return error
+>>>>>>> 187602377d6b0aadebfb843b219ff43b3f98f505
 
 gedcomParser()
