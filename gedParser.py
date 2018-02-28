@@ -131,25 +131,18 @@ def gedcomParser():
         marriageBeforeDeath(k, v['Marriage'],v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
         birthBeforeMarriage(k, v['Marriage'], v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'])
-<<<<<<< HEAD
         
         for child in v['Children']: 
             birthBeforeMarriageOfParents(v['Husband ID'], v['Wife ID'], v['Marriage'],child, individuals[child]['Birthday'])
             birthBeforeDeathOfParent(v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'], child,individuals[child]['Birthday'])
             parentsAgeCheck(v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'], child, individuals[child]['Birthday'])
-||||||| merged common ancestors
-        birthBeforeMarriageOfParents(k, v["Marriage"], v["Children"])
-
-
-
-=======
-        #    birthBeforeMarriageOfParents(k, v["Marriage"], v["Children"])
+     
+     
         husbWifeNotSiblings(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
         husbWifeNotCousins(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
 
 
 
->>>>>>> 187602377d6b0aadebfb843b219ff43b3f98f505
 #Function to calculate age of Individual
 def getAge(Id):
     currDate = datetime.date.today()
@@ -336,16 +329,8 @@ def divorceBeforeDeath(k, divorce, husbandId, husbandDeath, wifeId, wifeDeath):
 def ageLessThanOneFifty(k, age):
     if age == "N/A":
         return 0
-<<<<<<< HEAD
-    
-    if int(age) > 150 or int(age) < 0:
-||||||| merged common ancestors
-
-    if age > 150 or age < 0:
-=======
 
     if int(age) > 150 or int(age) < 0:
->>>>>>> 187602377d6b0aadebfb843b219ff43b3f98f505
         print("ERROR: INDIVIDUAL: US07: " + str(k) + " age " + str(age) + " is older than 150 or less than 0.")
         return 1
     else:
@@ -408,10 +393,7 @@ def parentsAgeCheck(husbandId, husbandBirth, wifeId, wifeBirth, childId, childBi
         err = 1
         print("ERROR: US12: Mother too old")
 
-<<<<<<< HEAD
     return err
-||||||| merged common ancestors
-=======
 #US18
 def husbWifeNotSiblings(k, husbID, husbFam, wifeID, wifeFam):
         if husbID != 'N/A' and husbID == wifeID:
@@ -442,6 +424,5 @@ def husbWifeNotCousins(k, husbID, husbFam, wifeID, wifeFam):
         if error == 1:
                 print('ERROR: FAMILY: '+ k + " Husband (" + husbID +") and wife (" + wifeID + ") are first cousins and married")
         return error
->>>>>>> 187602377d6b0aadebfb843b219ff43b3f98f505
 
 gedcomParser()
