@@ -35,7 +35,7 @@ def days_difference(d1, d2, type):
 	if afterDate(d1,d2):
 		return -1
 	else:
-		typeDict = {"years": 365, "weeks": 7, "months": 30.4, "days": 1} #returning months,days and years
+		typeDict = {"years": 365, "weeks": 7, "months": 30.4, "days": 1} 
 		return str(((d2-d1)/typeDict[type]).days)
 
 printErrors = []
