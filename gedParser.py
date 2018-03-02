@@ -238,9 +238,9 @@ def dateHasPassed(date, currDict, currId, dateType):
     if (datetime.date(checkDate[0], checkDate[1], checkDate[2]) -
         currDate).days > 0:
         if(currDict == fams):
-            return("Error: Invalid "+ dateType + "for FAMILY" + currId + ": " + date + " has not happened yet as of " + str(datetime.date.today()))
+            return("Error: FAMILY: US01:" + currId + ": " + dateType + " on " + date + " has not happened yet as of " + str(datetime.date.today()))
         if(currDict == indis):
-            return("Error: Invalid "+ dateType + "for INDIVIDUAL" + currId + ": " + date + " has not happened yet as of " + str(datetime.date.today()))
+            return("ERROR: INDIVIDUAL: US01: " + currId +": "+ dateType + " on " + date + " has not happened yet as of " + str(datetime.date.today()))
     return ""
 
 #US02: Function to check that birth is before marriage
@@ -252,12 +252,12 @@ def birthBeforeMarriage(k, marriage, husbandId, husbandBirth, wifeId, wifeBirth)
     error = 0
     #check husband birth
     if husbandBirth != "N/A" and husbandBirth > marriage:
-        print("ERROR: FAMILY: US06: " + str(k) + ": Married " + str(marriage) + \
+        print("ERROR: FAMILY: US02: " + str(k) + ": Married " + str(marriage) + \
         " before husband's (" + husbandId + ") birth on " + str(husbandBirth))
         error = 1
     #check wife birth
     if wifeBirth != "N/A" and wifeBirth > marriage:
-        print("ERROR: FAMILY: US06: " + str(k) + ": Married " + str(marriage) + \
+        print("ERROR: FAMILY: US02: " + str(k) + ": Married " + str(marriage) + \
         " before wife's (" + wifeId + ") birth on " + str(wifeBirth))
         error = 1
 
@@ -350,7 +350,7 @@ def birthBeforeMarriageOfParents( husbandId, wifeId, marriage, childId, childBir
         return err
 
     if marriage > childBirthday:
-        print("ERROR: Family: US09: Child: " + childId + "'s birthday is before the marriage of husband " + husbandId +" and wife " + wifeId)
+        print("ERROR: FAMILY: US08: Child: " + childId + "'s birthday is before the marriage of husband " + husbandId +" and wife " + wifeId)
         err = 1
 
     return err 
