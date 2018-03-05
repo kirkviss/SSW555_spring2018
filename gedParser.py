@@ -162,7 +162,7 @@ def gedcomParser():
         marriageBeforeDeath(k, v[Marriage],v[HusbandId], individuals[v[HusbandId]][Death], v[WifeId], individuals[v[WifeId]][Death])
         divorceBeforeDeath(k, v[Divorce], v[HusbandId], individuals[v[HusbandId]][Death], v[WifeId], individuals[v[WifeId]][Death])
         birthBeforeMarriage(k, v[Marriage], v[HusbandId], individuals[v[HusbandId]][Birthday], v[WifeId], individuals[v[WifeId]][Birthday])
-	fewerThanFifteen(k,v["Children"],v["Husband Name"],["Wife Name"])
+	fewerThanFifteen(k,v["Children"],v["Husband Name"],v["Wife Name"])
 
         
         for child in v['Children']: 
@@ -441,7 +441,7 @@ def fewerThanFifteen(familyItem, anArray, husbName, wifeName):
 
 
     if(len(anArray) > 14):
-        print("ERROR: US15:"+ str(husbName) + "and" +str(wifeName)+ "have more than 15 children")
+        print("ERROR: FAMILY: US15: "+ str(husbName) + " and " +str(wifeName)+ " have more than 15 children")
         return 1
     else:
         return 0
