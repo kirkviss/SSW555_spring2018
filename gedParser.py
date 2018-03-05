@@ -428,6 +428,23 @@ def parentsAgeCheck(husbandId, husbandBirth, wifeId, wifeBirth, childId, childBi
         print("ERROR: US12: Mother too old")
 
     return err
+
+
+
+#US15
+def fewerThanFifteen(familyItem, anArray, husbName, wifeName):
+
+    if husbName == "N/A" or wifeName == "N/A":
+        return 0
+
+
+    if(len(anArray) > 14):
+        print("ERROR: US15:"+ str(husbName) + "and" +str(wifeName)+ "have more than 15 children")
+        return 1
+    else:
+        return 0
+
+
 #US18
 def husbWifeNotSiblings(k, husbID, husbFam, wifeID, wifeFam):
         if husbID != 'N/A' and husbID == wifeID:
