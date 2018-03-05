@@ -13,6 +13,10 @@ from prettytable import PrettyTable
 indis = {}
 fams = {}
 
+#Gloabl individual and family collections
+individuals = {}
+families = {}
+
 #dictionaries holding tags and respective values for easier handling of dicts
 dateTags = {"BIRT": "Birthday", "DEAT": "Death", "MARR": "Marriage", "DIV": "Divorce"}
 indiTags = {"NAME": "Name", "SEX": "Gender", "FAMC": "Child", "FAMS": "Spouse"}
