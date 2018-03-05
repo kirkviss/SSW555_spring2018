@@ -17,10 +17,24 @@ fams = {}
 individuals = {}
 families = {}
 
+# All hard code string values to change to global values  
+Birthday = "Birthday"
+Death = "Death"
+Marriage = "Marriage"
+Divorce = "Divorce"
+Name = "Name"
+Gender = "Gender"
+Child = "Child"
+Spouse = "Spouse"
+HusbandId = "Husband ID"
+HusbandName = "Husband Name"
+WifeId = "Wife ID"
+WifeName = "Wife Name" 
+
 #dictionaries holding tags and respective values for easier handling of dicts
-dateTags = {"BIRT": "Birthday", "DEAT": "Death", "MARR": "Marriage", "DIV": "Divorce"}
-indiTags = {"NAME": "Name", "SEX": "Gender", "FAMC": "Child", "FAMS": "Spouse"}
-famTags = {"HUSB": ["Husband ID", "Husband Name"], "WIFE": ["Wife ID", "Wife Name"]}
+dateTags = {"BIRT": Birthday, "DEAT": Birthday, "MARR": Marriage, "DIV": Divorce}
+indiTags = {"NAME": Name , "SEX": Gender, "FAMC": Child, "FAMS": Spouse}
+famTags = {"HUSB": [HusbandId, HusbandName], "WIFE": [WifeId, WifeName]}
 monthNums = {"JAN": "01", "MAR": "03", "MAY": "05", "JUL": "07", "AUG": "08", "OCT": "10", "DEC": "12", "APR": "04", "JUN": "06", "SEP" : "09","NOV": "11", "FEB": "02"}
 
 def afterDate(d1, d2):
@@ -49,6 +63,9 @@ printErrors = []
 #families in dictionaries, sorts dictionaries into collections
 #then finally pretty prints collections
 def gedcomParser():
+
+
+   
     if (len(sys.argv) > 1 and sys.argv[1][-4:] == ".ged"):
         infile = open(sys.argv[1], "r")
     else:
@@ -64,18 +81,18 @@ def gedcomParser():
                 #US22
                 if currId in indis.keys():
                     printErrors.append("ERROR: INDIVIDUAL: US22: id " + currId + " already found. Previous individual has been replaced.")
-                indis[currId] = {"Death": "N/A", "Alive": "True", "Spouse":
-                                 "N/A/", "Child": "N/A"}
+                indis[currId] = {Death: "N/A", "Alive": "True", Spouse:
+                                 "N/A/", Child: "N/A"}
                 currDict = indis
             if parts[1] == "FAM":
                 currId = parts[2]
-                fams[currId] = {"Children": [], "Divorce": "N/A"}
+                fams[currId] = {"Children": [], Divorce: "N/A"}
                 currDict = fams
         elif line[0] == "1":
             parts = oneLine(line.split())
             if parts[1] in dateTags.keys():
                 Date = dateTags[parts[1]]
-                if Date == "Death":
+                if Date == Death:
                     indis[currId]["Alive"] = "False"
             elif parts[1] in indiTags.keys():
                 tag = indiTags[parts[1]]
@@ -87,7 +104,7 @@ def gedcomParser():
                 if parts[1] in famTags:
                     tags = famTags[parts[1]]
                     fams[currId][tags[0]] = parts[2]
-                    fams[currId][tags[1]] = indis[parts[2]]["Name"]
+                    fams[currId][tags[1]] = indis[parts[2]][Name ]
                 else:
                     fams[currId]["Children"].append(parts[2])
         elif line[0] == "2":
@@ -102,21 +119,21 @@ def gedcomParser():
         indis[i]["Age"] = getAge(i)
 
     individuals = collections.OrderedDict(sorted(indis.items()))
-    prettyIndi = PrettyTable(["Id", "Name", "Birthday", "Gender", "Age",
-                             "Alive", "Death", "Child", "Spouse"])
+    prettyIndi = PrettyTable(["Id", Name , Birthday, Gender, "Age",
+                             "Alive", Death, Child, Spouse])
     for k,v in individuals.items():
-        row = list([k, v["Name"], v["Birthday"], v["Gender"], v["Age"], v["Alive"],
-              v["Death"], v["Child"], v["Spouse"]])
+        row = list([k, v[Name ], v[Birthday], v[Gender], v["Age"], v["Alive"],
+              v[Death], v[Child], v[Spouse]])
         prettyIndi.add_row(row)
     print("Individuals")
     print(prettyIndi)
     families = collections.OrderedDict(sorted(fams.items()))
-    prettyFam = PrettyTable(["Id", "Married", "Divorced", "Husband ID",
-                             "Husband Name", "Wife ID", "Wife Name",
+    prettyFam = PrettyTable(["Id", "Married", "Divorced", HusbandId,
+                             HusbandName, WifeId, WifeName,
                              "Children"])
     for k,v in families.items():
-        row = list([k, v["Marriage"], v["Divorce"], v["Husband ID"],
-                             v["Husband Name"], v["Wife ID"], v["Wife Name"],
+        row = list([k, v[Marriage], v[Divorce], v[HusbandId],
+                             v[HusbandName], v[WifeId], v[WifeName],
                              v["Children"]])
         prettyFam.add_row(row)
     print("Families")
@@ -129,36 +146,36 @@ def gedcomParser():
 
     #Individual Checks
     for k,v in individuals.items():
-        birthBeforeDeath(k, v["Birthday"], v["Death"])
+        birthBeforeDeath(k, v[Birthday], v[Death])
         ageLessThanOneFifty(k, v["Age"])
         
 
     #Family checks
     for k,v in families.items():
-        marriageBeforeDivorce(k, v["Marriage"], v["Divorce"])
-        marriageBeforeDeath(k, v['Marriage'],v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
-        divorceBeforeDeath(k, v['Divorce'], v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'])
-        birthBeforeMarriage(k, v['Marriage'], v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'])
+        marriageBeforeDivorce(k, v)
+        marriageBeforeDeath(k, v[Marriage],v[HusbandId], individuals[v[HusbandId]][Death], v[WifeId], individuals[v[WifeId]][Death])
+        divorceBeforeDeath(k, v[Divorce], v[HusbandId], individuals[v[HusbandId]][Death], v[WifeId], individuals[v[WifeId]][Death])
+        birthBeforeMarriage(k, v[Marriage], v[HusbandId], individuals[v[HusbandId]][Birthday], v[WifeId], individuals[v[WifeId]][Birthday])
         
         for child in v['Children']: 
-            birthBeforeMarriageOfParents(v['Husband ID'], v['Wife ID'], v['Marriage'],child, individuals[child]['Birthday'])
-            birthBeforeDeathOfParent(v['Husband ID'], individuals[v['Husband ID']]['Death'], v['Wife ID'], individuals[v['Wife ID']]['Death'], child,individuals[child]['Birthday'])
-            parentsAgeCheck(v['Husband ID'], individuals[v['Husband ID']]['Birthday'], v['Wife ID'], individuals[v['Wife ID']]['Birthday'], child, individuals[child]['Birthday'])
+            birthBeforeMarriageOfParents(v[HusbandId], v[WifeId], v[Marriage],child, individuals[child][Birthday])
+            birthBeforeDeathOfParent(v[HusbandId], individuals[v[HusbandId]][Death], v[WifeId], individuals[v[WifeId]][Death], child,individuals[child][Birthday])
+            parentsAgeCheck(v[HusbandId], individuals[v[HusbandId]][Birthday], v[WifeId], individuals[v[WifeId]][Birthday], child, individuals[child][Birthday])
      
      
-        husbWifeNotSiblings(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
-        husbWifeNotCousins(k, v['Husband ID'], indis[v['Husband ID']]['Child'], v['Wife ID'], indis[v['Wife ID']]['Child'])
+        husbWifeNotSiblings(k, v[HusbandId], indis[v[HusbandId]][Child], v[WifeId], indis[v[WifeId]][Child])
+        husbWifeNotCousins(k, v[HusbandId], indis[v[HusbandId]][Child], v[WifeId], indis[v[WifeId]][Child])
 
 
 
 #Function to calculate age of Individual
 def getAge(Id):
     currDate = datetime.date.today()
-    birth = list(map(int, indis[Id]["Birthday"].split("-")))
+    birth = list(map(int, indis[Id][Birthday].split("-")))
     birthDate = datetime.date(birth[0], birth[1], birth[2])
     days = 0
     if indis[Id]["Alive"] == "False":
-        death = list(map(int, indis[Id]["Death"].split("-")))
+        death = list(map(int, indis[Id][Death].split("-")))
         currDate = datetime.date(death[0], death[1], death[2])
     days = (currDate-birthDate).days
     years = days/365
@@ -188,7 +205,7 @@ def zeroLine(ln):
 
 #Function to evaluate and reformat 1 level lines
 def oneLine(ln):
-    if ln[1] == "NAME":
+    if ln[1] == Name :
         if len(ln) == 2 or (len(ln) > 2 and ln[-1][0] + ln[-1][-1] != "//"):
             ln.append("N")
             return ln
@@ -242,9 +259,9 @@ def dateHasPassed(date, currDict, currId, dateType):
     if (datetime.date(checkDate[0], checkDate[1], checkDate[2]) -
         currDate).days > 0:
         if(currDict == fams):
-            return("Error: Invalid "+ dateType + "for FAMILY" + currId + ": " + date + " has not happened yet as of " + str(datetime.date.today()))
+            return("Error: FAMILY: US01:" + currId + ": " + dateType + " on " + date + " has not happened yet as of " + str(datetime.date.today()))
         if(currDict == indis):
-            return("Error: Invalid "+ dateType + "for INDIVIDUAL" + currId + ": " + date + " has not happened yet as of " + str(datetime.date.today()))
+            return("ERROR: INDIVIDUAL: US01: " + currId +": "+ dateType + " on " + date + " has not happened yet as of " + str(datetime.date.today()))
     return ""
 
 #US02: Function to check that birth is before marriage
@@ -256,12 +273,12 @@ def birthBeforeMarriage(k, marriage, husbandId, husbandBirth, wifeId, wifeBirth)
     error = 0
     #check husband birth
     if husbandBirth != "N/A" and husbandBirth > marriage:
-        print("ERROR: FAMILY: US06: " + str(k) + ": Married " + str(marriage) + \
+        print("ERROR: FAMILY: US02: " + str(k) + ": Married " + str(marriage) + \
         " before husband's (" + husbandId + ") birth on " + str(husbandBirth))
         error = 1
     #check wife birth
     if wifeBirth != "N/A" and wifeBirth > marriage:
-        print("ERROR: FAMILY: US06: " + str(k) + ": Married " + str(marriage) + \
+        print("ERROR: FAMILY: US02: " + str(k) + ": Married " + str(marriage) + \
         " before wife's (" + wifeId + ") birth on " + str(wifeBirth))
         error = 1
 
@@ -282,7 +299,10 @@ def birthBeforeDeath(k, birthday, death):
 
 #US04 -- marriage before divorce
 #same as US03, may want to simpley combined these stories to create one
-def marriageBeforeDivorce(familyItem, marriage,divorce ):
+def marriageBeforeDivorce(familyItem, value):
+    
+    marriage = value[Marriage]
+    divorce = value[Divorce]
     status_na = "N/A"
 
     if marriage == "N/A" or divorce == "N/A":
@@ -354,7 +374,7 @@ def birthBeforeMarriageOfParents( husbandId, wifeId, marriage, childId, childBir
         return err
 
     if marriage > childBirthday:
-        print("ERROR: Family: US09: Child: " + childId + "'s birthday is before the marriage of husband " + husbandId +" and wife " + wifeId)
+        print("ERROR: FAMILY: US08: Child: " + childId + "'s birthday is before the marriage of husband " + husbandId +" and wife " + wifeId)
         err = 1
 
     return err 
@@ -413,14 +433,14 @@ def husbWifeNotSiblings(k, husbID, husbFam, wifeID, wifeFam):
 def husbWifeNotCousins(k, husbID, husbFam, wifeID, wifeFam):
         error = 0
         if husbFam != 'N/A' and wifeFam != 'N/A':
-                hDad = fams[husbFam]['Husband ID']
-                hMom = fams[husbFam]['Wife ID']
-                wDad = fams[wifeFam]['Husband ID']
-                wMom = fams[wifeFam]['Wife ID']
-                hDadFam = indis[hDad]['Child']
-                hMomFam = indis[hMom]['Child']
-                wDadFam = indis[wDad]['Child']
-                wMomFam = indis[wMom]['Child']
+                hDad = fams[husbFam][HusbandId]
+                hMom = fams[husbFam][WifeId]
+                wDad = fams[wifeFam][HusbandId]
+                wMom = fams[wifeFam][WifeId]
+                hDadFam = indis[hDad][Child]
+                hMomFam = indis[hMom][Child]
+                wDadFam = indis[wDad][Child]
+                wMomFam = indis[wMom][Child]
                 if hDadFam == wDadFam and hDadFam != 'N/A':
                         error = 1
                 if hDadFam == wMomFam and hDadFam != 'N/A':
