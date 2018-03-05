@@ -81,8 +81,11 @@ def gedcomParser():
                 #US22
                 if currId in indis.keys():
                     printErrors.append("ERROR: INDIVIDUAL: US22: id " + currId + " already found. Previous individual has been replaced.")
+
                 indis[currId] = {Death: "N/A", "Alive": "True", Spouse:
                                  "N/A/", Child: "N/A"}
+
+
                 currDict = indis
             if parts[1] == "FAM":
                 currId = parts[2]
@@ -138,6 +141,9 @@ def gedcomParser():
         prettyFam.add_row(row)
     print("Families")
     print(prettyFam)
+
+    #US23
+    sameNameAndBirth(individuals)
 
     #Invalid date errors
     for err in printErrors:
@@ -452,5 +458,24 @@ def husbWifeNotCousins(k, husbID, husbFam, wifeID, wifeFam):
         if error == 1:
                 print('ERROR: FAMILY: '+ k + " Husband (" + husbID +") and wife (" + wifeID + ") are first cousins and married")
         return error
+
+#US23
+def sameNameAndBirth(individuals):
+    namesAndBirths = []
+
+    for k,v in individuals.items():
+        namesAndBirths.append((v[Name], v[Birthday]))
+    #print namesAndBirths
+    
+    from collections import Counter
+
+    c=collections.Counter(namesAndBirths)
+
+    for k, v in c.most_common():
+        if v > 1:
+            print("ERROR: INDIVIDUAL: US23: Multiple (" +  str(v) + ") Individuals named " + str(k[0]) + " with same birthday found.")
+            return 1
+        else:
+            return 0
 
 gedcomParser()
