@@ -465,8 +465,7 @@ def sameNameAndBirth(individuals):
 
     for k,v in individuals.items():
         namesAndBirths.append((v[Name], v[Birthday]))
-    #print namesAndBirths
-    
+
     from collections import Counter
 
     c=collections.Counter(namesAndBirths)
