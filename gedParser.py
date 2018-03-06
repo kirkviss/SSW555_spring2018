@@ -470,7 +470,7 @@ def husbWifeNotCousins(k, husbID, husbFam, wifeID, wifeFam):
             if fam in wFams and fam != 'N/A':
                 error = 1
     if error == 1:
-        print('ERROR: FAMILY: '+ k + " Husband (" + husbID +") and wife ("
+        print('ERROR: FAMILY: US19: '+ k + " Husband (" + husbID +") and wife ("
               + wifeID + ") are first cousins and married")
     return error
 
