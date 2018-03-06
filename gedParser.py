@@ -32,7 +32,7 @@ WifeId = "Wife ID"
 WifeName = "Wife Name" 
 
 #dictionaries holding tags and respective values for easier handling of dicts
-dateTags = {"BIRT": Birthday, "DEAT": Birthday, "MARR": Marriage, "DIV": Divorce}
+dateTags = {"BIRT": Birthday, "DEAT": Death, "MARR": Marriage, "DIV": Divorce}
 indiTags = {"NAME": Name , "SEX": Gender, "FAMC": Child, "FAMS": Spouse}
 famTags = {"HUSB": [HusbandId, HusbandName], "WIFE": [WifeId, WifeName]}
 monthNums = {"JAN": "01", "MAR": "03", "MAY": "05", "JUL": "07", "AUG": "08", "OCT": "10", "DEC": "12", "APR": "04", "JUN": "06", "SEP" : "09","NOV": "11", "FEB": "02"}
@@ -48,8 +48,7 @@ def afterDate(d1, d2):
 		return 1
 	else:
 		return 0
-    
-    
+
 def days_difference(d1, d2, type):
 	if afterDate(d1,d2):
 		return -1
@@ -63,9 +62,6 @@ printErrors = []
 #families in dictionaries, sorts dictionaries into collections
 #then finally pretty prints collections
 def gedcomParser():
-
-
-   
     if (len(sys.argv) > 1 and sys.argv[1][-4:] == ".ged"):
         infile = open(sys.argv[1], "r")
     else:
@@ -81,11 +77,8 @@ def gedcomParser():
                 #US22
                 if currId in indis.keys():
                     printErrors.append("ERROR: INDIVIDUAL: US22: id " + currId + " already found. Previous individual has been replaced.")
-
                 indis[currId] = {Death: "N/A", "Alive": "True", Spouse:
                                  "N/A/", Child: "N/A"}
-
-
                 currDict = indis
             if parts[1] == "FAM":
                 currId = parts[2]
