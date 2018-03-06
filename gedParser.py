@@ -176,7 +176,7 @@ def gedcomParser():
 
 
 
-#Function to calculate age of Individual
+#US27
 def getAge(Id):
     currDate = datetime.date.today()
     birth = list(map(int, indis[Id][Birthday].split("-")))
@@ -455,28 +455,24 @@ def husbWifeNotSiblings(k, husbID, husbFam, wifeID, wifeFam):
         else:
                 return 0
 
+#US19
+def get_fams(famc):
+    dad = fams[famc]['Husband ID']
+    mom = fams[famc]['Wife ID']
+    return [indis[dad]['Child'], indis[mom]['Child']]
+
 def husbWifeNotCousins(k, husbID, husbFam, wifeID, wifeFam):
-        error = 0
-        if husbFam != 'N/A' and wifeFam != 'N/A':
-                hDad = fams[husbFam][HusbandId]
-                hMom = fams[husbFam][WifeId]
-                wDad = fams[wifeFam][HusbandId]
-                wMom = fams[wifeFam][WifeId]
-                hDadFam = indis[hDad][Child]
-                hMomFam = indis[hMom][Child]
-                wDadFam = indis[wDad][Child]
-                wMomFam = indis[wMom][Child]
-                if hDadFam == wDadFam and hDadFam != 'N/A':
-                        error = 1
-                if hDadFam == wMomFam and hDadFam != 'N/A':
-                        error = 1
-                if hMomFam == wDadFam and hMomFam != 'N/A':
-                        error = 1
-                if hMomFam == wMomFam and hMomFam != 'N/A':
-                        error = 1
-        if error == 1:
-                print('ERROR: FAMILY: '+ k + " Husband (" + husbID +") and wife (" + wifeID + ") are first cousins and married")
-        return error
+    error = 0
+    if husbFam != 'N/A' and wifeFam != 'N/A':
+        hFams = get_fams(husbFam)
+        wFams = get_fams(wifeFam)
+        for fam in hFams:
+            if fam in wFams and fam != 'N/A':
+                error = 1
+    if error == 1:
+        print('ERROR: FAMILY: '+ k + " Husband (" + husbID +") and wife ("
+              + wifeID + ") are first cousins and married")
+    return error
 
 #US23
 def sameNameAndBirth(individuals):
