@@ -392,12 +392,12 @@ def birthBeforeDeathOfParent(husbandId, husbandDeath, wifeId, wifeDeath, childId
 
     if not (wifeDeath == "N/A") and wifeDeath < childBirthday:
         err = 1 
-        print("ERROR: Family: US09: Child: " + childId + "'s birthday is after the death of  thier mother " + wifeId)
+        print("ERROR: FAMILY: US09: Child: " + childId + "'s birthday is after the death of  thier mother " + wifeId)
 
 
     if not (husbandDeath == "N/A") and (datetime.datetime.strptime(husbandDeath, '%Y-%m-%d') + dateutil.relativedelta.relativedelta(months=9)) < datetime.datetime.strptime( childBirthday, '%Y-%m-%d')  :
         err = 1
-        print("ERROR: Family: US09:  Child: " + childId + "'s birthday is more than 9 months after the death of their father " + husbandId)
+        print("ERROR: FAMILY: US09:  Child: " + childId + "'s birthday is more than 9 months after the death of their father " + husbandId)
          
     return err
 
