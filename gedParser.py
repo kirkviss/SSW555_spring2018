@@ -450,7 +450,7 @@ def fewerThanFifteen(familyItem, anArray, husbName, wifeName):
 #US18
 def husbWifeNotSiblings(k, husbID, husbFam, wifeID, wifeFam):
         if husbID != 'N/A' and husbID == wifeID:
-                print('ERROR: FAMILY: ' + k + ": husband (" + husbID + ") and wife (" + wifeID + ") are siblings.")
+                print('ERROR: FAMILY: US18:' + k + ": husband (" + husbID + ") and wife (" + wifeID + ") are siblings.")
                 return 1
         else:
                 return 0
