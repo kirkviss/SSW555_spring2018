@@ -413,14 +413,14 @@ def parentsAgeCheck(husbandId, husbandBirth, wifeId, wifeBirth, childId, childBi
     date_type_wifeBirth = datetime.datetime.strptime(wifeBirth, '%Y-%m-%d')
     date_type_childBirth = datetime.datetime.strptime(childBirth,'%Y-%m-%d' )
 
-
-    if dateutil.relativedelta.relativedelta(date_type_husbandBirth, date_type_childBirth).years >= 80:
+    # print (dateutil.relativedelta.relativedelta(date_type_husbandBirth, date_type_childBirth).years)
+    if dateutil.relativedelta.relativedelta(date_type_childBirth, date_type_husbandBirth).years >= 80:
         err = 1
-        print("ERROR: US12: Father too old")
+        print("ERROR: FAMILY: US12: " + husbandId + " is too old to be the father of " + childId)
 
-    if dateutil.relativedelta.relativedelta(date_type_wifeBirth, date_type_childBirth).years >= 60:
+    if dateutil.relativedelta.relativedelta( date_type_childBirth, date_type_wifeBirth).years >= 60:
         err = 1
-        print("ERROR: US12: Mother too old")
+        print("ERROR: FAMILY: US12: " + wifeId + " is too old to be the mother of " + childId)
 
     return err
 
