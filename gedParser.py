@@ -162,7 +162,7 @@ def gedcomParser():
         marriageBeforeDeath(k, v[Marriage],v[HusbandId], individuals[v[HusbandId]][Death], v[WifeId], individuals[v[WifeId]][Death])
         divorceBeforeDeath(k, v[Divorce], v[HusbandId], individuals[v[HusbandId]][Death], v[WifeId], individuals[v[WifeId]][Death])
         birthBeforeMarriage(k, v[Marriage], v[HusbandId], individuals[v[HusbandId]][Birthday], v[WifeId], individuals[v[WifeId]][Birthday])
-	fewerThanFifteen(k,v["Children"],v["Husband Name"],v["Wife Name"])
+        fewerThanFifteen(k,v["Children"],v["Husband Name"],v["Wife Name"])
 
         
         for child in v['Children']: 
