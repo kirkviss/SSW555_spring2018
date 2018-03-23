@@ -154,7 +154,11 @@ def gedcomParser():
     for k,v in individuals.items():
         birthBeforeDeath(k, v[Birthday], v[Death])
         ageLessThanOneFifty(k, v["Age"])
-        
+    
+    #Marriage Checks
+    for k,v in individuals.items():
+        listLivingMarried(k, v)
+        listLivingSingle(k, v)
 
     #Family checks
     for k,v in families.items():
@@ -476,5 +480,15 @@ def sameNameAndBirth(individuals):
             return 1
         else:
             return 0
+
+#US30
+def listLivingMarried(k, v):
+    if v["Alive"] == 'True' and 'N/A' not in v["Spouse"]:
+        print("INDIVIDUAL: US30: " + str(k) + " is alive and married")
+
+#US31
+def listLivingSingle(k, v):
+    if int(v["Age"]) > 30 and 'N/A' in v["Spouse"]:
+        print("INDIVIDUAL: US30: " + str(k) + " is over 30 and single")
 
 gedcomParser()
