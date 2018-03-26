@@ -37,25 +37,6 @@ indiTags = {"NAME": Name , "SEX": Gender, "FAMC": Child, "FAMS": Spouse}
 famTags = {"HUSB": [HusbandId, HusbandName], "WIFE": [WifeId, WifeName]}
 monthNums = {"JAN": "01", "MAR": "03", "MAY": "05", "JUL": "07", "AUG": "08", "OCT": "10", "DEC": "12", "APR": "04", "JUN": "06", "SEP" : "09","NOV": "11", "FEB": "02"}
 
-def afterDate(d1, d2):
-	if not isinstance(d1, datetime.date):
-		d1 = datetime.datetime.strptime(d1, '%d %b %Y').date()
-	if not isinstance(d2, datetime.date):
-		d2 = datetime.datetime.strptime(d2, '%d %b %Y').date()
-	if d1 > d2:
-		return 0 #invalid date
-	elif d1 < d2:
-		return 1
-	else:
-		return 0
-
-def days_difference(d1, d2, type):
-	if afterDate(d1,d2):
-		return -1
-	else:
-		typeDict = {"years": 365, "weeks": 7, "months": 30.4, "days": 1} 
-		return str(((d2-d1)/typeDict[type]).days)
-
 printErrors = []
 
 #Main function which parses through GEDCOM file, stores individuals and
@@ -170,6 +151,7 @@ def gedcomParser():
      
         husbWifeNotSiblings(k, v[HusbandId], indis[v[HusbandId]][Child], v[WifeId], indis[v[WifeId]][Child])
         husbWifeNotCousins(k, v[HusbandId], indis[v[HusbandId]][Child], v[WifeId], indis[v[WifeId]][Child])
+	anniversaryOfHusbAndWife(k,v['Marriage'], v['Husband Name'], v['Wife Name'])
 
 
 
@@ -498,5 +480,15 @@ def listLivingMarried(k, v):
 def listLivingSingle(k, v):
     if int(v["Age"]) > 30 and 'N/A' in v["Spouse"]:
         print("INDIVIDUAL: US30: " + str(k) + " is over 30 and single")
+
+#US39	
+def anniversaryOfHusbAndWife(familyItem, married, husbname, wifename):
+    currDate = datetime.date.today()
+    checkDate = list(map(int, married.split('-')))
+    if ((((currDate - datetime.date(checkDate[0], checkDate[1], checkDate[2])).days - ((currDate - datetime.date(checkDate[0], checkDate[1], checkDate[2]))/1460).days) % 365) )>= 335:
+        print("ERROR: FAMILY: US39: Anniversary between " + husbname + " and " + wifename )
+        return 1
+    return 0
+
 
 gedcomParser()
