@@ -141,6 +141,8 @@ def gedcomParser():
         divorceBeforeDeath(k, v[Divorce], v[HusbandId], individuals[v[HusbandId]][Death], v[WifeId], individuals[v[WifeId]][Death])
         birthBeforeMarriage(k, v[Marriage], v[HusbandId], individuals[v[HusbandId]][Birthday], v[WifeId], individuals[v[WifeId]][Birthday])
         fewerThanFifteen(k,v["Children"],v["Husband Name"],v["Wife Name"])
+	husbIsFemale(k,v['Husband ID'],v['Husband Name'],individuals[v['Husband ID']]['Gender'])
+        wifeIsMale(k,v['Wife ID'],v['Wife Name'],individuals[v['Wife ID']]['Gender'])
 
         
         for child in v['Children']: 
@@ -489,6 +491,28 @@ def anniversaryOfHusbAndWife(familyItem, married, husbname, wifename):
         print("ERROR: FAMILY: US39: Anniversary between " + husbname + " and " + wifename )
         return 1
     return 0
+
+
+#US21
+def husbIsFemale(familyItem,genderHusb, husbname, gender1):
+
+    if genderHusb != "None":
+        if gender1 == "F":
+            print("ERROR: FAMILY: US21: " + str(husbname) + " is female")
+            return 1
+        else:
+            return 0
+
+#US21
+def wifeIsMale(familyItem,genderHusb, wifename, gender2):
+
+     if genderHusb != "None":
+        if gender2 == "M":
+            print("ERROR: FAMILY: US21: " + str(wifename) + " is male")
+            return 1
+        else:
+            return 0
+
 
 
 gedcomParser()
