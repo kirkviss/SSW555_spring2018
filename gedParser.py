@@ -109,6 +109,7 @@ def gedcomParser():
                              HusbandName, WifeId, WifeName,
                              "Children"])
     for k,v in families.items():
+        v['Children'] = orderSiblings(k, v['Children'])
         row = list([k, v[Marriage], v[Divorce], v[HusbandId],
                              v[HusbandName], v[WifeId], v[WifeName],
                              v["Children"]])
@@ -141,7 +142,7 @@ def gedcomParser():
         divorceBeforeDeath(k, v[Divorce], v[HusbandId], individuals[v[HusbandId]][Death], v[WifeId], individuals[v[WifeId]][Death])
         birthBeforeMarriage(k, v[Marriage], v[HusbandId], individuals[v[HusbandId]][Birthday], v[WifeId], individuals[v[WifeId]][Birthday])
         fewerThanFifteen(k,v["Children"],v["Husband Name"],v["Wife Name"])
-	husbIsFemale(k,v['Husband ID'],v['Husband Name'],individuals[v['Husband ID']]['Gender'])
+        husbIsFemale(k,v['Husband ID'],v['Husband Name'],individuals[v['Husband ID']]['Gender'])
         wifeIsMale(k,v['Wife ID'],v['Wife Name'],individuals[v['Wife ID']]['Gender'])
 
         
@@ -153,7 +154,7 @@ def gedcomParser():
      
         husbWifeNotSiblings(k, v[HusbandId], indis[v[HusbandId]][Child], v[WifeId], indis[v[WifeId]][Child])
         husbWifeNotCousins(k, v[HusbandId], indis[v[HusbandId]][Child], v[WifeId], indis[v[WifeId]][Child])
-	anniversaryOfHusbAndWife(k,v['Marriage'], v['Husband Name'], v['Wife Name'])
+        anniversaryOfHusbAndWife(k,v['Marriage'], v['Husband Name'], v['Wife Name'])
 
 
 
@@ -513,6 +514,11 @@ def wifeIsMale(familyItem,genderHusb, wifename, gender2):
         else:
             return 0
 
-
+#US28
+def orderSiblings(famID, children):
+    ages = {id: indis[id]['Age'] for id in children}
+    ordered_dict = collections.OrderedDict(sorted(ages.items())).items()
+    ordered_list = [k for k, v in ordered_dict]
+    return ordered_list
 
 gedcomParser()
