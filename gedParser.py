@@ -485,6 +485,9 @@ def listLivingSingle(k, v):
 
 #US39	
 def anniversaryOfHusbAndWife(familyItem, married, husbname, wifename):
+    if husbname =="N/A" or wifename =="N/A":
+        return 0
+
     currDate = datetime.date.today()
     checkDate = list(map(int, married.split('-')))
     if ((((currDate - datetime.date(checkDate[0], checkDate[1], checkDate[2])).days - ((currDate - datetime.date(checkDate[0], checkDate[1], checkDate[2]))/1460).days) % 365) )>= 335:
