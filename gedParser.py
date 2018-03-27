@@ -130,10 +130,13 @@ def gedcomParser():
         birthBeforeDeath(k, v[Birthday], v[Death])
         ageLessThanOneFifty(k, v["Age"])
     
-    #Marriage Checks
+    #Marriage and Living Checks
     for k,v in individuals.items():
+        listDeceased(k, v)
         listLivingMarried(k, v)
         listLivingSingle(k, v)
+        listRecentBirths(k, v["Birthday"])
+        listRecentDeaths(k, v["Death"])
 
     #Family checks
     for k,v in families.items():
@@ -474,6 +477,14 @@ def sameNameAndBirth(individuals):
         else:
             return 0
 
+#US29
+def listDeceased(k, v):
+    if v["Alive"] == 'False':
+        print("INDIVIDUAL: US29: " + str(k) + " is deceased")
+        return 0
+    else:
+        return 1
+
 #US30
 def listLivingMarried(k, v):
     if v["Alive"] == 'True' and 'N/A' not in v["Spouse"]:
@@ -485,10 +496,39 @@ def listLivingMarried(k, v):
 #US31
 def listLivingSingle(k, v):
     if int(v["Age"]) > 30 and 'N/A' in v["Spouse"]:
-        print("INDIVIDUAL: US30: " + str(k) + " is over 30 and single")
+        print("INDIVIDUAL: US31: " + str(k) + " is over 30 and single")
         return 0
     else:
         return 1
+
+#US35
+def listRecentBirths(k, birth):
+
+    currDate = datetime.date.today()
+    birthArray = list(map(int, birth.split('-')))
+    birthDate = datetime.date(birthArray[0], birthArray[1], birthArray[2])
+    daysSinceBirth = (currDate - birthDate).days
+
+    if daysSinceBirth <= 30 and daysSinceBirth >= 0:
+        print("INDIVIDUAL: US35: " + str(k) + " was born with the past 30 days")
+        return 1
+    return 0
+
+#US36
+def listRecentDeaths(k, death):
+    if death == "N/A":
+        return 0
+
+    currDate = datetime.date.today()
+    deathArray = list(map(int, death.split('-')))
+    deathDate = datetime.date(deathArray[0], deathArray[1], deathArray[2])
+    daysSinceDeath = (currDate - deathDate).days
+
+    if daysSinceDeath <= 30 and daysSinceDeath >= 0:
+        print("INDIVIDUAL: US36: " + str(k) + " has died with the past 30 days")
+        return 1
+    return 0
+
 
 #US39	
 def anniversaryOfHusbAndWife(familyItem, married, husbname, wifename):
