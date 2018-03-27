@@ -503,7 +503,6 @@ def listLivingSingle(k, v):
 
 #US35
 def listRecentBirths(k, birth):
-
     currDate = datetime.date.today()
     birthArray = list(map(int, birth.split('-')))
     birthDate = datetime.date(birthArray[0], birthArray[1], birthArray[2])
