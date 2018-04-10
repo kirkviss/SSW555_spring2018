@@ -59,7 +59,7 @@ def gedcomParser():
                 if currId in indis.keys():
                     printErrors.append("ERROR: INDIVIDUAL: US22: id " + currId + " already found. Previous individual has been replaced.")
                 indis[currId] = {Death: "N/A", "Alive": "True", Spouse:
-                                 "N/A/", Child: "N/A"}
+                                 "N/A", Child: "N/A"}
                 currDict = indis
             if parts[1] == "FAM":
                 currId = parts[2]
@@ -99,7 +99,7 @@ def gedcomParser():
     prettyIndi = PrettyTable(["Id", Name , Birthday, Gender, "Age",
                              "Alive", Death, Child, Spouse])
     for k,v in individuals.items():
-        row = list([k, v[Name ], v[Birthday], v[Gender], v["Age"], v["Alive"],
+        row = list([k, v[Name], v[Birthday], v[Gender], v["Age"], v["Alive"],
               v[Death], v[Child], v[Spouse]])
         prettyIndi.add_row(row)
     print("Individuals")
@@ -131,12 +131,19 @@ def gedcomParser():
         ageLessThanOneFifty(k, v["Age"])
     
     #Marriage and Living Checks
+    orphans = []
     for k,v in individuals.items():
         listDeceased(k, v)
         listLivingMarried(k, v)
         listLivingSingle(k, v)
         listRecentBirths(k, v["Birthday"])
         listRecentDeaths(k, v["Death"])
+        if v['Child'] != "N/A":
+            if isOrphan(k):
+                name = v[Name]
+                orphans.append(name)
+    print("INDIVIDUALS: US33: The following children are orphans: ", str(orphans))
+
 
     #Family checks
     for k,v in families.items():
@@ -147,8 +154,8 @@ def gedcomParser():
         fewerThanFifteen(k,v["Children"],v["Husband Name"],v["Wife Name"])
         husbIsFemale(k,v['Husband ID'],v['Husband Name'],individuals[v['Husband ID']]['Gender'])
         wifeIsMale(k,v['Wife ID'],v['Wife Name'],individuals[v['Wife ID']]['Gender'])
+        checkMarriageAges(k, v)
 
-        
         for child in v['Children']: 
             birthBeforeMarriageOfParents(v[HusbandId], v[WifeId], v[Marriage],child, individuals[child][Birthday])
             birthBeforeDeathOfParent(v[HusbandId], individuals[v[HusbandId]][Death], v[WifeId], individuals[v[WifeId]][Death], child,individuals[child][Birthday])
@@ -384,12 +391,12 @@ def birthBeforeDeathOfParent(husbandId, husbandDeath, wifeId, wifeDeath, childId
 
     if not (wifeDeath == "N/A") and wifeDeath < childBirthday:
         err = 1 
-        print("ERROR: FAMILY: US09: Child: " + childId + "'s birthday is after the death of  thier mother " + wifeId)
+        print("ERROR: FAMILY: US09: Child: " + childId + "'s birthday is after the death of their mother " + wifeId)
 
 
     if not (husbandDeath == "N/A") and (datetime.datetime.strptime(husbandDeath, '%Y-%m-%d') + dateutil.relativedelta.relativedelta(months=9)) < datetime.datetime.strptime( childBirthday, '%Y-%m-%d')  :
         err = 1
-        print("ERROR: FAMILY: US09:  Child: " + childId + "'s birthday is more than 9 months after the death of their father " + husbandId)
+        print("ERROR: FAMILY: US09: Child: " + childId + "'s birthday is over 9 months after the death of their father " + husbandId)
          
     return err
 
@@ -568,5 +575,34 @@ def orderSiblings(famID, children):
     ordered_dict = collections.OrderedDict(sorted(ages.items())).items()
     ordered_list = [k for k, v in ordered_dict]
     return ordered_list
+
+#US33
+def isOrphan(childID):
+    if int(indis[childID]['Age']) < 18:
+        childFam = indis[childID]['Child']
+        parents = [fams[childFam]['Husband ID'], fams[childFam]['Wife ID']]
+        father = indis[parents[0]]
+        mother = indis[parents[1]]
+        if father["Death"] != "N/A" and mother["Death"] != "N/A":
+            return True
+        return False
+
+#US34
+def ageAtMarriage(Id):
+    spouseFam = indis[Id]['Spouse']
+    married = list(map(int, fams[spouseFam][Marriage].split("-")))
+    marDate = datetime.date(married[0], married[1], married[2])
+    birth = list(map(int, indis[Id][Birthday].split("-")))
+    birthDate = datetime.date(birth[0], birth[1], birth[2])
+    mAge = marDate - birthDate
+    return int(mAge.days/365)
+
+def checkMarriageAges(famID, fam):
+    husbID = fam['Husband ID']
+    wifeID = fam['Wife ID']
+    hAge = ageAtMarriage(husbID)
+    wAge = ageAtMarriage(wifeID)
+    if hAge > (wAge * 2):
+        print('FAMILY: US34: ', famID, ': At', str(hAge) + ', Husband', husbID, 'was over twice the age of Wife', wifeID + ',', str(wAge) + ', on the day of their marriage')
 
 gedcomParser()
