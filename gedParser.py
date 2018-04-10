@@ -129,6 +129,7 @@ def gedcomParser():
     for k,v in individuals.items():
         birthBeforeDeath(k, v[Birthday], v[Death])
         ageLessThanOneFifty(k, v["Age"])
+        birthdayOfLivingPeople(k, v['Name'], v['Birthday'])
     
     #Marriage and Living Checks
     orphans = []
@@ -604,5 +605,19 @@ def checkMarriageAges(famID, fam):
     wAge = ageAtMarriage(wifeID)
     if hAge > (wAge * 2):
         print('FAMILY: US34: ', famID, ': At', str(hAge) + ', Husband', husbID, 'was over twice the age of Wife', wifeID + ',', str(wAge) + ', on the day of their marriage')
+        
+#US38
+ def birthdayOfLivingPeople(k, name, birthday):
+    if name =="N/A" or birthday =="N/A":
+        return 0
 
+    currDate = datetime.date.today()
+    checkDate = list(map(int, birthday.split('-')))
+    if ((((currDate - datetime.date(checkDate[0], checkDate[1], checkDate[2])).days - (
+            (currDate - datetime.date(checkDate[0], checkDate[1], checkDate[2])) / 1460).days) % 365)) >= 335:
+        print("ERROR: INDIVIDUAL: US38: The birthday of " +str(name))
+        return 1
+    return 0
+
+        
 gedcomParser()
