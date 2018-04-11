@@ -1,0 +1,124 @@
+Individuals
++------+----------------------+------------+--------+-----+-------+------------+-------+--------+
+|  Id  |         Name         |  Birthday  | Gender | Age | Alive |   Death    | Child | Spouse |
++------+----------------------+------------+--------+-----+-------+------------+-------+--------+
+| I10  |    Cat /Wallace/     | 1920-08-6  |   M    |  97 |  True |    N/A     |  F60  |  F18   |
+| I11  |    Dana /Wallace/    | 1922-07-11 |   F    |  88 | False | 2010-10-5  |  N/A  |  F18   |
+| I110 |     Mal Reynolds     | 1935-03-12 |   M    |  70 | False | 2005-03-12 |  N/A  |  F101  |
+| I111 |     Cho Reynolds     | 1960-02-13 |   F    |  45 | False | 2005-12-23 |  N/A  |  F101  |
+| I122 |   Cooper /Roofer/    | 1980-02-12 |   M    | -10 | False | 1970-02-11 |  N/A  |  F40   |
+| I123 |    Sally /Roofer/    | 1960-03-12 |   F    | 240 | False | 2200-12-12 |  N/A  |  F40   |
+| I18  |   Latoya /LeMoose/   | 1800-04-4  |   F    | 218 |  True |    N/A     |  F60  |  F20   |
+| I19  |  Antoine /LeMoose/   | 1928-10-17 |   F    |  76 | False | 2005-08-21 |  N/A  |  F20   |
+| I195 |  Jack /Skellington/  | 1928-10-17 |   M    |  89 | False | 2018-03-21 |  N/A  |  F101  |
+| I196 |  Jill /Skellington/  | 2018-03-5  |   F    |  0  | False | 2018-03-26 |  F101 |  N/A   |
+| I197 |     Sal Reynolds     | 2004-08-15 |   M    |  13 |  True |    N/A     |  F101 |  N/A   |
+| I30  |  Katrina /Tsaranov/  | 1919-03-2  |   M    |  61 | False | 1980-08-2  |  N/A  |  F24   |
+| I31  |   Artem /Tsaranov/   | 1918-12-30 |   M    |  99 |  True |    N/A     |  N/A  |  F24   |
+| I35  |   Pamela /Daniels/   | 1930-07-27 |   F    |  49 | False | 1980-05-13 |  N/A  |  F26   |
+| I36  |    Rick /Daniels/    | 1930-01-7  |   M    |  41 | False | 1971-03-6  |  N/A  |  F26   |
+| I50  |   Sheila /LeMoose/   | 2012-01-2  |   F    |  6  |  True |    N/A     |  F18  |  F29   |
+| I52  |  Charles /LeMoose/   | 1965-06-10 |   M    |  52 |  True |    N/A     |  F20  |  F29   |
+| I54  |   Boris /Tsaranov/   | 1960-03-15 |   M    |  39 | False | 1999-09-28 |  F24  |  F30   |
+| I56  |   Sydney /Daniels/   | 1970-02-3  |   F    |  48 |  True |    N/A     |  F20  |  F32   |
+| I60  |   Keith /Daniels/    | 1970-04-29 |   M    |  47 |  True |    N/A     |  F26  |  F32   |
+| I62  |   Kinsey /Daniels/   | 1967-11-26 |   F    |  50 |  True |    N/A     |  F26  |  N/A   |
+| I64  |   Jayden /LeMoose/   | 1993-06-23 |   M    |  24 |  True |    N/A     |  F29  |  N/A   |
+| I69  | Streetlamp /LeMoose/ | 1995-12-4  |   M    |  22 |  True |    N/A     |  F29  |  N/A   |
+| I70  |   Danica /LeMoose/   | 1997-03-1  |   F    |  21 |  True |    N/A     |  F29  |  N/A   |
+| I73  |   Layla /Tsaranov/   | 1991-08-5  |   F    |  26 |  True |    N/A     |  F30  |  N/A   |
+| I74  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I75  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I76  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I77  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I78  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I79  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I80  |   Keith /Daniels/    | 2001-10-14 |   M    |  16 |  True |    N/A     |  F32  |  F50   |
+| I83  |  Samantha /Daniels/  | 2003-05-19 |   M    |  14 |  True |    N/A     |  F32  |  F50   |
+| I84  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I85  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I86  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I87  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I88  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I89  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I90  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I91  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I92  |  Daniel /Tsaranov/   | 1994-08-2  |   M    |  23 |  True |    N/A     |  F30  |  N/A   |
+| I95  |  Decklan /Daniels/   | 2003-05-19 |   M    |  14 |  True |    N/A     |  F32  |  N/A   |
+| I99  |    Cat /Wallace/     | 1920-08-6  |   M    |  97 |  True |    N/A     |  N/A  |  F99   |
++------+----------------------+------------+--------+-----+-------+------------+-------+--------+
+Families
++------+------------+------------+------------+-------------------+---------+--------------------+------------------------------------------------------------------------------------------------------------------+
+|  Id  |  Married   |  Divorced  | Husband ID |    Husband Name   | Wife ID |     Wife Name      |                                                     Children                                                     |
++------+------------+------------+------------+-------------------+---------+--------------------+------------------------------------------------------------------------------------------------------------------+
+| F101 | 1980-03-2  |    N/A     |    I110    |    Mal Reynolds   |   I111  |    Cho Reynolds    |                                                 ['I196', 'I197']                                                 |
+| F18  | 1940-03-29 |    N/A     |    I10     |   Cat /Wallace/   |   I11   |   Dana /Wallace/   |                                                     ['I50']                                                      |
+| F20  | 1943-03-16 |    N/A     |    I19     | Antoine /LeMoose/ |   I18   |  Latoya /LeMoose/  |                                                  ['I52', 'I56']                                                  |
+| F24  | 1961-08-5  |    N/A     |    I31     |  Artem /Tsaranov/ |   I30   | Katrina /Tsaranov/ |                                                     ['I54']                                                      |
+| F26  | 1951-11-22 |    N/A     |    I36     |   Rick /Daniels/  |   I35   |  Pamela /Daniels/  |                                                  ['I60', 'I62']                                                  |
+| F29  | 1992-02-14 |    N/A     |    I52     | Charles /LeMoose/ |   I50   |  Sheila /LeMoose/  |                                              ['I64', 'I69', 'I70']                                               |
+| F30  | 1990-05-10 |    N/A     |    I54     |  Boris /Tsaranov/ |   I56   |  Sydney /Daniels/  | ['I73', 'I74', 'I75', 'I76', 'I77', 'I78', 'I79', 'I84', 'I85', 'I86', 'I87', 'I88', 'I89', 'I90', 'I91', 'I92'] |
+| F32  | 2001-02-3  |    N/A     |    I60     |  Keith /Daniels/  |   I56   |  Sydney /Daniels/  |                                              ['I80', 'I83', 'I95']                                               |
+| F40  | 1975-02-12 | 1974-12-12 |    I122    |  Cooper /Roofer/  |   I123  |   Sally /Roofer/   |                                                        []                                                        |
+| F50  | 2005-01-5  |    N/A     |    I80     |  Keith /Daniels/  |   I83   | Samantha /Daniels/ |                                                        []                                                        |
++------+------------+------------+------------+-------------------+---------+--------------------+------------------------------------------------------------------------------------------------------------------+
+ERROR: INDIVIDUAL: US23: Multiple (15) Individuals named Daniel /Tsaranov/ with same birthday found.
+ERROR: INDIVIDUAL: US22: id I83 already found. Previous individual has been replaced.
+ERROR: INDIVIDUAL: US01: I123: Death on 2200-12-12 has not happened yet as of 2018-04-10
+ERROR: INDIVIDUAL: US03: I122 Died 1970-02-11 before Born 1980-02-12
+ERROR: INDIVIDUAL: US07: I122 age -10 is older than 150 or less than 0.
+ERROR: INDIVIDUAL: US07: I123 age 240 is older than 150 or less than 0.
+ERROR: INDIVIDUAL: US07: I18 age 218 is older than 150 or less than 0.
+ERROR: INDIVIDUAL: US03: I196 Died 2018-03-26 before Born 2018-03-5
+ERROR: INDIVIDUAL: US38: The birthday of Keith /Daniels/
+INDIVIDUAL: US30: I10 is alive and married
+INDIVIDUAL: US29: I11 is deceased
+INDIVIDUAL: US29: I110 is deceased
+INDIVIDUAL: US29: I111 is deceased
+INDIVIDUAL: US29: I122 is deceased
+INDIVIDUAL: US29: I123 is deceased
+INDIVIDUAL: US30: I18 is alive and married
+INDIVIDUAL: US29: I19 is deceased
+INDIVIDUAL: US29: I195 is deceased
+INDIVIDUAL: US36: I195 has died with the past 30 days
+INDIVIDUAL: US29: I196 is deceased
+INDIVIDUAL: US36: I196 has died with the past 30 days
+INDIVIDUAL: US29: I30 is deceased
+INDIVIDUAL: US30: I31 is alive and married
+INDIVIDUAL: US29: I35 is deceased
+INDIVIDUAL: US29: I36 is deceased
+INDIVIDUAL: US30: I50 is alive and married
+INDIVIDUAL: US30: I52 is alive and married
+INDIVIDUAL: US29: I54 is deceased
+INDIVIDUAL: US30: I56 is alive and married
+INDIVIDUAL: US30: I60 is alive and married
+INDIVIDUAL: US31: I62 is over 30 and single
+INDIVIDUAL: US30: I80 is alive and married
+INDIVIDUAL: US30: I83 is alive and married
+INDIVIDUAL: US30: I99 is alive and married
+INDIVIDUALS: US33: The following children are orphans:  ['Jill /Skellington/', 'Sal Reynolds']
+FAMILY: US34:  F101 : At 45, Husband I110 was over twice the age of Wife I111, 20, on the day of their marriage
+ERROR: FAMILY: US09: Child: I196's birthday is after the death of their mother I111
+ERROR: FAMILY: US09: Child: I196's birthday is over 9 months after the death of their father I110
+ERROR: FAMILY: US12: I110 is too old to be the father of I196
+ERROR: FAMILY: US09: Child: I50's birthday is after the death of their mother I11
+ERROR: FAMILY: US12: I10 is too old to be the father of I50
+ERROR: FAMILY: US12: I11 is too old to be the mother of I50
+ERROR: FAMILY: US21: Antoine /LeMoose/ is female
+ERROR: FAMILY: US12: I18 is too old to be the mother of I52
+ERROR: FAMILY: US12: I18 is too old to be the mother of I56
+ERROR: FAMILY: US21: Katrina /Tsaranov/ is male
+ERROR: FAMILY: US08: Child: I54's birthday is before the marriage of husband I31 and wife I30
+ERROR: FAMILY: US02: F29: Married 1992-02-14 before wife's (I50) birth on 2012-01-2
+FAMILY: US34:  F29 : At 26, Husband I52 was over twice the age of Wife I50, -19, on the day of their marriage
+ERROR: FAMILY: US19: F29 Husband (I52) and wife (I50) are first cousins and married
+ERROR: FAMILY: US15: Boris /Tsaranov/ and Sydney /Daniels/ have more than 15 children
+ERROR: FAMILY: US39: Anniversary between Boris /Tsaranov/ and Sydney /Daniels/
+ERROR: FAMILY: USO4: F40 Divorced 1974-12-12 before Married 1975-02-12
+ERROR: FAMILY: US05: F40: marriage 1975-02-12after husband's (I122) death on 1970-02-11
+ERROR: FAMILY: US06: F40: Divorced 1974-12-12 after husband's (I122) death on 1970-02-11
+ERROR: FAMILY: US02: F40: Married 1975-02-12 before husband's (I122) birth on 1980-02-12
+ERROR: FAMILY: US21: Samantha /Daniels/ is male
+FAMILY: US34:  F50 : At 3, Husband I80 was over twice the age of Wife I83, 1, on the day of their marriage
+ERROR: FAMILY: US18: F50: husband (I80) and wife (I83) are siblings.
+ERROR: FAMILY: US19: F50 Husband (I80) and wife (I83) are first cousins and married

@@ -607,7 +607,7 @@ def checkMarriageAges(famID, fam):
         print('FAMILY: US34: ', famID, ': At', str(hAge) + ', Husband', husbID, 'was over twice the age of Wife', wifeID + ',', str(wAge) + ', on the day of their marriage')
         
 #US38
- def birthdayOfLivingPeople(k, name, birthday):
+def birthdayOfLivingPeople(k, name, birthday):
     if name =="N/A" or birthday =="N/A":
         return 0
 
